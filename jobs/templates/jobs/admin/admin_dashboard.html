@@ -1,0 +1,175 @@
+
+{% extends "jobs/base.html" %}
+{% load static %}
+{% block content %}
+<div class="flex flex-col lg:flex-row gap-8">
+
+    <!-- SIDEBAR -->
+    <aside class="w-full lg:w-64 bg-white rounded-xl shadow p-6">
+        <h2 class="text-xl font-bold mb-6">Admin Panel</h2>
+
+        <nav class="space-y-4">
+            <a href="{% url 'admin_dashboard' %}" class="block font-medium text-blue-600">
+                Dashboard
+            </a>
+            <a href="{% url 'admin_jobs' %}" class="block text-gray-700 hover:text-blue-600">Manage Jobs</a>
+            <a href="{% url 'admin_applications' %}" class="block text-gray-700 hover:text-blue-600">Applications</a>
+            <a href="{% url 'admin_users' %}" class="block text-gray-700 hover:text-blue-600">Users</a>
+            <a href="{% url 'admin_messages' %}" class="block text-gray-700 hover:text-blue-600">Messages</a>
+        </nav>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 space-y-8">
+
+        <!-- ADMIN PROFILE -->
+        <div class="bg-white rounded-xl shadow p-6 flex items-center gap-6">
+            {% if profile.photo %}
+    <img
+        src="{{ profile.photo.url }}"
+        alt="Admin Photo"
+        class="w-24 h-24 rounded-full object-cover border"
+    >
+{% else %}
+    <img
+        src="{% static 'images/default-avatar.png' %}"
+        class="w-24 h-24 rounded-full"
+    >
+{% endif %}
+
+            <div class="flex-1">
+                <h2 class="text-2xl font-bold">
+                    {{ user.get_full_name|default:user.username }}
+                </h2>
+                <p class="text-gray-600">Administrator</p>
+                <p class="text-sm text-gray-500">{{ user.email }}</p>
+
+                <!-- PHOTO UPLOAD -->
+                <!-- PHOTO UPLOAD -->
+<form method="POST" enctype="multipart/form-data" class="mt-4" id="photoForm">
+    {% csrf_token %}
+
+    <!-- Hidden file input -->
+    <input
+        type="file"
+        name="photo"
+        id="photoInput"
+        accept="image/*"
+        class="hidden"
+        onchange="document.getElementById('photoForm').submit();"
+    >
+
+    <button
+        type="button"
+        onclick="document.getElementById('photoInput').click()"
+        class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
+    >
+        Upload
+    </button>
+</form>
+
+            </div>
+        </div>
+
+        <!-- PAGE TITLE -->
+        <div>
+            <h1 class="text-3xl font-bold">Admin Dashboard</h1>
+            <p class="text-gray-600">Overview & management</p>
+        </div>
+
+        <!-- STATS -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+
+            <div class="bg-white rounded-xl shadow p-6">
+                <p class="text-gray-500">Total Users</p>
+                <p class="text-3xl font-bold mt-2">{{ total_users }}</p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow p-6">
+                <p class="text-gray-500">Total Jobs</p>
+                <p class="text-3xl font-bold mt-2">{{ total_jobs }}</p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow p-6">
+                <p class="text-gray-500">Applications</p>
+                <p class="text-3xl font-bold mt-2">{{ total_applications }}</p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow p-6">
+                <p class="text-gray-500">Pending Jobs</p>
+                <p class="text-3xl font-bold mt-2">
+                    {{ pending_jobs|default:"0" }}
+                </p>
+            </div>
+
+        </div>
+
+        <!-- JOB MANAGEMENT -->
+        <section class="bg-white rounded-xl shadow p-6">
+            <h2 class="text-xl font-semibold mb-4">Job Management</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <a href="#" class="border rounded-lg p-4 hover:bg-gray-50">
+                    Approve / Reject Jobs
+                </a>
+                <a href="#" class="border rounded-lg p-4 hover:bg-gray-50">
+                    View All Jobs
+                </a>
+                <a href="#" class="border rounded-lg p-4 hover:bg-gray-50">
+                    Delete Spam Jobs
+                </a>
+            </div>
+        </section>
+
+        <!-- APPLICATION MANAGEMENT -->
+        <section class="bg-white rounded-xl shadow p-6">
+            <h2 class="text-xl font-semibold mb-4">Application Management</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <a href="#" class="border rounded-lg p-4 hover:bg-gray-50">
+                    View Applications
+                </a>
+                <a href="#" class="border rounded-lg p-4 hover:bg-gray-50">
+                    Download CVs
+                </a>
+                <a href="#" class="border rounded-lg p-4 hover:bg-gray-50">
+                    Filter by Job
+                </a>
+            </div>
+        </section>
+
+        <!-- USER MANAGEMENT -->
+        <section class="bg-white rounded-xl shadow p-6">
+            <h2 class="text-xl font-semibold mb-4">User Management</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <a href="#" class="border rounded-lg p-4 hover:bg-gray-50">
+                    View Users
+                </a>
+                <a href="#" class="border rounded-lg p-4 hover:bg-gray-50">
+                    Block / Unblock Users
+                </a>
+                <a href="#" class="border rounded-lg p-4 hover:bg-gray-50">
+                    Admin Roles
+                </a>
+            </div>
+        </section>
+
+        <!-- QUICK ACTIONS -->
+        <section class="bg-white rounded-xl shadow p-6">
+            <h2 class="text-xl font-semibold mb-4">Quick Actions</h2>
+            <div class="flex flex-wrap gap-4">
+                <a href="#" class="px-4 py-2 bg-blue-600 text-white rounded-lg">
+    Create Job
+</a>
+
+                <a href="#" class="px-4 py-2 bg-gray-800 text-white rounded-lg">
+                    View Reports
+                </a>
+            </div>
+        </section>
+<div class="mt-2">
+    <a href="{% url 'home' %}" class="px-4 py-2 bg-indigo-800 text-white rounded-lg hover:bg-indigo-700">
+                    Back to Home
+                </a>
+                </div>
+    </main>
+</div>
+{% endblock %}

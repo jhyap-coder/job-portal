@@ -1,0 +1,71 @@
+{% extends "jobs/base.html" %}
+
+{% block title %}Create Job | Admin{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow">
+
+    <h1 class="text-2xl font-bold mb-6">Create New Job</h1>
+
+    <form method="post" class="space-y-6">
+        {% csrf_token %}
+
+        <div>
+            <label class="font-medium">Job Title</label>
+            {{ form.title }}
+        </div>
+
+        <div>
+            <label class="font-medium">Company Name</label>
+            {{ form.company_name }}
+        </div>
+
+        <div>
+            <label class="font-medium">Location</label>
+            {{ form.location }}
+        </div>
+
+        <div>
+            <label class="font-medium">Job Type</label>
+            {{ form.job_type }}
+        </div>
+
+        <div>
+            <label class="font-medium">Salary</label>
+            {{ form.salary }}
+        </div>
+
+        <div>
+            <label class="font-medium">Description</label>
+            {{ form.description }}
+        </div>
+
+        <div>
+            <label class="font-medium">Requirements</label>
+            {{ form.requirements }}
+        </div>
+
+        <div class="flex gap-6">
+            <label class="flex items-center gap-2">
+                {{ form.featured }} Featured
+            </label>
+
+            <label class="flex items-center gap-2">
+                {{ form.is_active }} Active
+            </label>
+        </div>
+
+        <div class="flex gap-4">
+            <button type="submit"
+                class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                Create Job
+            </button>
+
+            <a href="{% url 'admin_jobs' %}"
+               class="px-6 py-2 border rounded-lg">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

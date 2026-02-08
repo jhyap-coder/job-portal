@@ -1,0 +1,89 @@
+{% extends "jobs/base.html" %}
+{% load static %}
+
+{% block title %}Apply for {{ job.title }}{% endblock %}
+
+{% block content %}
+<div class="bg-gradient-to-r from-indigo-800 to-blue-900 min-h-screen flex items-center justify-center p-4">
+    <div class="mb-10 w-full max-w-4xl rounded-2xl bg-white p-10 text-gray-900 shadow-xl">
+
+        <h2 class="text-4xl font-bold text-blue-900 mb-2">Apply for Job</h2>
+        <p class="text-gray-600 mb-6">{{ job.title }} at {{ job.company_name }}</p>
+
+        <form method="POST" enctype="multipart/form-data" class="space-y-4">
+            {% csrf_token %}
+
+            <!-- Photo Preview -->
+            <div class="text-center">
+                <img id="photoPreview"
+                     src="https://ui-avatars.com/api/?name={{ request.user.first_name }}"
+                     class="w-32 h-32 rounded-full border-4 border-indigo-800 mx-auto mb-3 object-cover">
+
+                <!-- Hidden Photo Input -->
+                <input type="file" name="{{ form.photo.name }}" id="photoInput" class="hidden">
+
+                <!-- Label as Upload Button -->
+                <label for="photoInput"
+                       class="cursor-pointer inline-block bg-indigo-800 text-white px-4 py-2 rounded-lg hover:bg-blue-900 transition">
+                    Upload Photo
+                </label>
+
+                {% if form.photo.errors %}
+                    <p class="text-red-600 text-sm mt-1">{{ form.photo.errors }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Render other fields dynamically -->
+            {% for field in form %}
+                {% if field.name != 'photo' %}
+                    <div>
+                        {{ field.label_tag }}
+                        {{ field }}
+                        {% if field.errors %}
+                            <p class="text-red-600 text-sm mt-1">{{ field.errors }}</p>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+            <!-- Submit Button -->
+            <div class="flex justify-end space-x-4 pt-6">
+                <a href="{% url 'job_list' %}" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400">
+                    Cancel
+                </a>
+                <button type="submit" class="px-4 py-2 bg-indigo-800 text-white rounded-lg hover:bg-indigo-700">
+                    Submit Application
+                </button>
+            </div>
+
+            <!-- Non-field errors -->
+            {% if form.non_field_errors %}
+                <div class="bg-red-100 text-red-700 p-3 rounded mt-4">
+                    {% for error in form.non_field_errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </form>
+
+    </div>
+</div>
+
+<script>
+function previewImage(event) {
+    const reader = new FileReader();
+    reader.onload = function () {
+        document.getElementById('photoPreview').src = reader.result;
+    };
+    reader.readAsDataURL(event.target.files[0]);
+}
+
+// Attach preview to photo input by ID
+document.addEventListener('DOMContentLoaded', function () {
+    const photoInput = document.getElementById('photoInput');
+    if(photoInput){
+        photoInput.addEventListener('change', previewImage);
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,137 @@
+{% extends "jobs/base.html" %}
+{% load static %}
+
+{% block title %}Job Details{% endblock %}
+
+{% block content %}
+
+<div class="max-w-5xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
+
+    <!-- Django Messages -->
+
+
+    <!-- Job Header -->
+    <div class="bg-white shadow-lg rounded-lg p-8 mb-8 border-l-8 border-blue-600">
+        <h1 class="text-4xl font-extrabold mb-2 text-gray-800">{{ job.title }}</h1>
+        <div class="flex flex-wrap text-gray-600 gap-4">
+            <p><strong>Company:</strong> {{ job.company_name }}</p>
+            <p><strong>Location:</strong> {{ job.location }}</p>
+            <p><strong>Salary:</strong> {{ job.salary }}</p>
+            <p><strong>Type:</strong> {{ job.job_type }}</p>
+        </div>
+    </div>
+
+    <!-- Job Description -->
+    <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+        <h2 class="text-2xl font-semibold mb-4 text-gray-800 border-b pb-2">
+            Job Description
+        </h2>
+        <p class="text-gray-700 leading-relaxed">
+            {{ job.description|linebreaks }}
+        </p>
+    </div>
+
+    <!-- Apply Button -->
+    <div class="text-center mb-10">
+        {% if user.is_authenticated %}
+            <button id="applyBtn"
+                class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3 rounded-lg shadow-lg">
+                Apply Now
+            </button>
+        {% else %}
+            <p class="text-red-500 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">
+                Please <a href="{% url 'login' %}" class="underline">login</a> to apply.
+            </p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Apply Modal -->
+<div id="applyModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+
+    <div class="bg-white rounded-lg shadow-lg max-w-lg w-full p-6 relative">
+        <button id="closeModal"
+                class="absolute top-2 right-4 text-2xl text-gray-500 hover:text-black">
+            &times;
+        </button>
+
+        <h2 class="text-xl font-bold mb-4">
+            Apply for {{ job.title }}
+        </h2>
+
+        <!-- Application Form -->
+        <form method="POST"
+              enctype="multipart/form-data"
+              action="{% url 'apply_job' job.id %}">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label class="font-semibold">Full Name</label>
+                <input type="text" name="full_name"
+                       value="{{ user.get_full_name }}"
+                       class="w-full border rounded px-3 py-2" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="font-semibold">Email</label>
+                <input type="email" name="email"
+                       value="{{ user.email }}"
+                       class="w-full border rounded px-3 py-2" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="font-semibold">Phone</label>
+                <input type="text" name="phone"
+                       class="w-full border rounded px-3 py-2" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="font-semibold">Resume (PDF)</label>
+                <input type="file" name="cv"
+                       class="w-full border rounded px-3 py-2" required>
+            </div>
+
+            <div class="mb-4">
+                <label class="font-semibold">Photo</label>
+                <input type="file" name="photo"
+                       class="w-full border rounded px-3 py-2">
+            </div>
+
+            <button type="submit"
+                    class="bg-blue-600 hover:bg-blue-700 text-white w-full py-2 rounded font-semibold">
+                Submit Application
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Script -->
+<script>
+    const applyBtn = document.getElementById('applyBtn');
+    const applyModal = document.getElementById('applyModal');
+    const closeModal = document.getElementById('closeModal');
+
+    if (applyBtn) {
+        applyBtn.addEventListener('click', () => {
+            applyModal.classList.remove('hidden');
+        });
+    }
+
+    closeModal.addEventListener('click', () => {
+        applyModal.classList.add('hidden');
+    });
+
+    window.addEventListener('click', (e) => {
+        if (e.target === applyModal) {
+            applyModal.classList.add('hidden');
+        }
+    });
+</script>
+
+<style>
+    body {
+        background: linear-gradient(to right, #f3f4f6, #e5e7eb);
+    }
+</style>
+
+{% endblock %}

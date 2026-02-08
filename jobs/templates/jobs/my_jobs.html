@@ -1,0 +1,51 @@
+{% extends 'jobs/base.html' %}
+
+{% block title %}My Jobs{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto mt-20 mb-12 bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+
+    <h2 class="text-2xl font-bold mb-6 text-gray-800 dark:text-white">
+        My Job Applications
+    </h2>
+
+    {% if applications %}
+    <div class="overflow-x-auto">
+        <table class="w-full border-collapse">
+            <thead>
+                <tr class="bg-gray-100 dark:bg-gray-700">
+                    <th class="p-3 text-left">Job</th>
+                    <th class="p-3 text-left">Company</th>
+                    <th class="p-3 text-left">Status</th>
+                    <th class="p-3 text-left">Applied On</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for app in applications %}
+                <tr class="border-t">
+                    <td class="p-3">{{ app.job.title }}</td>
+                    <td class="p-3">{{ app.job.company_name }}</td>
+                    <td class="p-3 font-semibold">
+                        {{ app.get_status_display }}
+                    </td>
+                    <td class="p-3">
+                        {{ app.applied_at|date:"M d, Y" }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <p class="text-gray-500 dark:text-gray-400">
+            You have not applied for any jobs yet.
+        </p>
+    {% endif %}
+
+</div>
+<div class="mt-4">
+    <a href="{% url 'profile' %}" class="px-4 py-2 bg-indigo-800 text-white rounded-lg hover:bg-indigo-700">
+                    Back to Profile
+                </a>
+                </div>
+{% endblock %}

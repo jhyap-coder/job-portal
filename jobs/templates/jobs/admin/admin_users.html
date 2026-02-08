@@ -1,0 +1,88 @@
+{% extends "jobs/base.html" %}
+{% load static %}
+
+{% block title %}Admin | Users{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-6 py-8">
+
+    <h1 class="text-2xl font-bold mb-6">All Users</h1>
+
+    <div class="overflow-x-auto bg-white shadow rounded-lg">
+        <table class="min-w-full border border-gray-200">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">#</th>
+                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Name</th>
+                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Email</th>
+                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Role</th>
+                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Status</th>
+                    <th class="px-4 py-3 text-center text-sm font-semibold text-gray-700">Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for user in users %}
+                <tr class="border-t">
+                    <td class="px-4 py-3">{{ forloop.counter }}</td>
+
+                    <td class="px-4 py-3">
+                        {{ user.first_name }} {{ user.last_name }}
+                    </td>
+
+                    <td class="px-4 py-3">
+                        {{ user.email }}
+                    </td>
+
+                    <td class="px-4 py-3">
+                        {% if user.is_superuser %}
+                            Super Admin
+                        {% elif user.is_staff %}
+                            Admin
+                        {% else %}
+                            User
+                        {% endif %}
+                    </td>
+
+                    <td class="px-4 py-3">
+                        {% if user.is_active %}
+                            <span class="text-green-600 font-medium">Active</span>
+                        {% else %}
+                            <span class="text-red-600 font-medium">Blocked</span>
+                        {% endif %}
+                    </td>
+
+                    <td class="px-4 py-3 text-center">
+                        {% if not user.is_superuser %}
+                        <a href="{% url 'toggle_user' user.id %}"
+                           class="px-3 py-1 rounded text-white text-sm
+                           {% if user.is_active %}
+                               bg-red-500 hover:bg-red-600
+                           {% else %}
+                               bg-green-500 hover:bg-green-600
+                           {% endif %}">
+                            {% if user.is_active %}Block{% else %}Unblock{% endif %}
+                        </a>
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="px-4 py-6 text-center text-gray-500">
+                        No users found.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+<div class="mt-4">
+    <a href="{% url 'admin_dashboard' %}" class="px-4 py-2 bg-indigo-800 text-white rounded-lg hover:bg-indigo-700">
+                    Back to Dashboard
+                </a>
+                </div>
+</div>
+
+{% endblock %}

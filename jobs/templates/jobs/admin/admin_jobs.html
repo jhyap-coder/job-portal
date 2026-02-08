@@ -1,0 +1,75 @@
+{% extends "jobs/base.html" %}
+
+{% block title %}Admin Jobs | Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+
+    <h1 class="text-3xl font-bold mb-6">Manage Jobs</h1>
+
+    <div class="overflow-x-auto bg-white shadow rounded-lg">
+        <table class="min-w-full border border-gray-200">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th class="px-4 py-3 text-left text-sm font-semibold">Title</th>
+                    <th class="px-4 py-3 text-left text-sm font-semibold">Company</th>
+                    <th class="px-4 py-3 text-left text-sm font-semibold">Posted By</th>
+                    <th class="px-4 py-3 text-left text-sm font-semibold">Status</th>
+                    <th class="px-4 py-3 text-center text-sm font-semibold">Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for job in jobs %}
+                <tr class="border-t">
+                    <td class="px-4 py-3">{{ job.title }}</td>
+                    <td class="px-4 py-3">{{ job.company_name }}</td>
+                    <td class="px-4 py-3">{{ job.posted_by.username }}</td>
+                    <td class="px-4 py-3">
+                        {% if job.is_active %}
+                            <span class="text-green-600 font-semibold">Approved</span>
+                        {% else %}
+                            <span class="text-yellow-600 font-semibold">Pending</span>
+                        {% endif %}
+                    </td>
+                    <td class="px-4 py-3 text-center space-x-2">
+                        <!-- Edit Job -->
+                        <a href="{% url 'edit_job' job.id %}"
+                           class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded">
+                            Edit
+                        </a>
+
+                        <!-- Approve / Deactivate -->
+                        {% if not job.is_active %}
+                            <a href="{% url 'approve_job' job.id %}"
+                               class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded">
+                                Approve
+                            </a>
+                        {% else %}
+                            <a href="{% url 'reject_job' job.id %}"
+                               class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded">
+                                Deactivate
+                            </a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="px-4 py-6 text-center text-gray-500">
+                        No jobs found.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Back Button -->
+    <div class="mt-6">
+        <a href="{% url 'admin_dashboard' %}"
+           class="px-4 py-2 bg-indigo-800 text-white rounded-lg hover:bg-indigo-700">
+           Back to Dashboard
+        </a>
+    </div>
+</div>
+{% endblock %}

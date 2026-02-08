@@ -1,0 +1,80 @@
+{% extends 'jobs/base.html' %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-400 dark:bg-gray-900 flex items-center justify-center">
+    <div class="w-full max-w-5xl px-6 py-12">
+        <div class="flex flex-wrap bg-white dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden">
+
+            <!-- Image Section -->
+            <div class="hidden lg:block lg:w-5/12 bg-cover"
+                style="background-image: url('https://images.unsplash.com/photo-1525095182007-3874c4e2b38b?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NjJ8fGJ1c2luZXNzfGVufDB8fDB8fHww')">
+            </div>
+
+            <!-- Form Section -->
+            <div class="w-full lg:w-7/12 p-8">
+                <h3 class="text-2xl font-bold text-center text-gray-800 dark:text-white mb-6">
+                    Create an Account
+                </h3>
+
+                <form method="post" class="bg-white dark:bg-gray-800 p-6 rounded">
+                    {% csrf_token %}
+
+                    <!-- Errors will now show in base.html, so we remove here -->
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 dark:text-white">First Name</label>
+                            <input type="text" name="first_name" required
+                                value="{{ request.POST.first_name|default:'' }}"
+                                class="w-full px-3 py-2 border rounded focus:outline-none">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 dark:text-white">Last Name</label>
+                            <input type="text" name="last_name"
+                                value="{{ request.POST.last_name|default:'' }}"
+                                class="w-full px-3 py-2 border rounded focus:outline-none">
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <label class="block text-sm font-bold text-gray-700 dark:text-white">Email</label>
+                        <input type="email" name="email" required
+                            value="{{ request.POST.email|default:'' }}"
+                            class="w-full px-3 py-2 border rounded focus:outline-none">
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 dark:text-white">Password</label>
+                            <input type="password" name="password"
+                                class="w-full px-3 py-2 border rounded focus:outline-none">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 dark:text-white">Confirm Password</label>
+                            <input type="password" name="confirm_password"
+                                class="w-full px-3 py-2 border rounded focus:outline-none">
+                        </div>
+                    </div>
+
+                    <button type="submit"
+                        class="w-full mt-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                        Register Account
+                    </button>
+
+                    <div class="text-center mt-4">
+                        <a href="{% url 'login' %}" class="text-sm text-blue-500 hover:underline">
+                            Already have an account? Login
+                        </a>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

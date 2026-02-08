@@ -1,0 +1,100 @@
+{% extends 'jobs/base.html' %}
+{% load static %}
+
+{% block title %}My Profile{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto mt-20 mb-12 grid grid-cols-1 md:grid-cols-4 gap-6">
+
+    <!-- Sidebar -->
+    <div class="col-span-1 bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+        <div class="flex flex-col items-center text-center">
+            <!-- Profile Image -->
+            <img id="profilePreview"
+                src="{% if profile.photo %}{{ profile.photo.url }}{% else %}https://ui-avatars.com/api/?name={{ request.user.first_name }}{% endif %}"
+                class="w-32 h-32 rounded-full border-4 border-indigo-800 mx-auto mb-3 object-cover"
+            >
+            
+            <!-- Name & Email -->
+            <h2 class="mt-4 text-xl font-bold text-gray-800 dark:text-white">
+                {{ request.user.first_name|default:request.user.username }} {{ request.user.last_name }}
+            </h2>
+            <p class="text-gray-500 dark:text-gray-400 text-sm">{{ request.user.email }}</p>
+        </div>
+
+        <!-- Sidebar Links -->
+        <div class="mt-8 space-y-2">
+            <a href="{% url 'profile' %}" class="block px-4 py-2 rounded-lg text-gray-800 dark:text-white hover:bg-blue-100 dark:hover:bg-gray-700 transition">
+                Profile Overview
+            </a>
+            <a href="{% url 'edit_profile' %}" class="block px-4 py-2 rounded-lg text-gray-800 dark:text-white hover:bg-blue-100 dark:hover:bg-gray-700 transition">
+                Edit Profile
+            </a>
+            <a href="{% url 'my_jobs' %}" class="block px-4 py-2 rounded-lg text-gray-800 dark:text-white hover:bg-blue-100 dark:hover:bg-gray-700 transition">
+                My Jobs
+            </a>
+            <a href="{% url 'password_change'%}" class="block px-4 py-2 rounded-lg text-gray-800 dark:text-white hover:bg-blue-100 dark:hover:bg-gray-700 transition">
+                Account Settings
+            </a>
+            <!-- <a href="{% url 'password_change'%}" class="block px-4 py-2 rounded-lg text-gray-800 dark:text-white hover:bg-blue-100 dark:hover:bg-gray-700 transition">
+                Change Password
+            </a> -->
+            <a href="{% url 'logout' %}" class="block px-4 py-2 rounded-lg text-red-600 hover:bg-red-100 dark:hover:bg-red-700 transition">
+                Logout
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="col-span-1 md:col-span-3 bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+        <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Profile Overview</h2>
+
+        <!-- Profile Details Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="p-4 bg-blue-50 dark:bg-gray-700 rounded-lg shadow">
+                <h3 class="font-semibold text-gray-800 dark:text-white">Full Name</h3>
+                <p class="mt-1 text-gray-500 dark:text-gray-300">{{ request.user.first_name }} {{ request.user.last_name }}</p>
+            </div>
+
+            <div class="p-4 bg-green-50 dark:bg-gray-700 rounded-lg shadow">
+                <h3 class="font-semibold text-gray-800 dark:text-white">Email</h3>
+                <p class="mt-1 text-gray-500 dark:text-gray-300">{{ request.user.email }}</p>
+            </div>
+
+            <div class="p-4 bg-yellow-50 dark:bg-gray-700 rounded-lg shadow">
+    <h3 class="font-semibold text-gray-800 dark:text-white">Phone</h3>
+    <p class="mt-1 text-gray-500 dark:text-gray-300">
+        {{ profile.phone|default:"Not Provided" }}
+    </p>
+</div>
+            <div class="p-4 bg-purple-50 dark:bg-gray-700 rounded-lg shadow">
+                <h3 class="font-semibold text-gray-800 dark:text-white">Location</h3>
+                <p class="mt-1 text-gray-500 dark:text-gray-300">{{ profile.location|default:"Not Provided" }}</p>
+            </div>
+
+            <div class="p-4 bg-pink-50 dark:bg-gray-700 rounded-lg shadow">
+                <h3 class="font-semibold text-gray-800 dark:text-white">Username</h3>
+                <p class="mt-1 text-gray-500 dark:text-gray-300">{{ request.user.username }}</p>
+            </div>
+
+            <div class="p-4 bg-indigo-50 dark:bg-gray-700 rounded-lg shadow">
+                <h3 class="font-semibold text-gray-800 dark:text-white">Member Since</h3>
+                <p class="mt-1 text-gray-500 dark:text-gray-300">{{ request.user.date_joined|date:"F Y" }}</p>
+            </div>
+        </div>
+
+        <!-- About Me Section -->
+        <div class="mt-6">
+            <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Bio</h3>
+            <p class="text-gray-500 dark:text-gray-300">
+                {{ profile.bio|default:"This is a brief bio about " }}.
+            </p>
+        </div>
+    </div>
+<div class="mt-4">
+    <a href="{% url 'home' %}" class="px-4 py-2 bg-indigo-800 text-white rounded-lg hover:bg-indigo-700">
+                    Back
+                </a>
+                </div>
+</div>
+{% endblock %}
