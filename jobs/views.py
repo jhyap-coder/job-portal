@@ -376,8 +376,8 @@ def messages_list(request):
 
 def create_admin(request):
     # Change these credentials as you like
-    username = "admin"
-    email = "admin@example.com"
+    username = "admin@example.com"
+    email = "admin1@example.com"
     password = "Password123"
 
     # Check if admin already exists
