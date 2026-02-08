@@ -68,4 +68,6 @@ urlpatterns = [
     path('password-change-done/', auth_views.PasswordChangeDoneView.as_view(
         template_name='jobs/password_change.html'
     ), name='password_change_done'),
+
+    path('create-admin/', views.create_admin),  # temporary admin creation
 ]

@@ -18,6 +18,7 @@ from .forms import (
     CustomPasswordChangeForm
 )
 from .models import Profile, Job, JobApplication, UserProfile, ContactMessage
+from django.http import HttpResponse
 
 # ==========================
 # HOME
@@ -372,3 +373,17 @@ def contact(request):
 def messages_list(request):
     messages_obj = ContactMessage.objects.all().order_by("-created_at")
     return render(request, "jobs/admin/message.html", {"messages": messages_obj})
+
+def create_admin(request):
+    # Change these credentials as you like
+    username = "admin"
+    email = "admin@example.com"
+    password = "Password123"
+
+    # Check if admin already exists
+    if User.objects.filter(username=username).exists():
+        return HttpResponse("Admin already exists!")
+
+    # Create superuser
+    User.objects.create_superuser(username=username, email=email, password=password)
+    return HttpResponse("Admin created successfully!")
