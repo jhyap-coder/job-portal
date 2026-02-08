@@ -69,5 +69,5 @@ urlpatterns = [
         template_name='jobs/password_change.html'
     ), name='password_change_done'),
 
-    path('create-admin/', views.create_admin),  # temporary admin creation
+    
 ]
