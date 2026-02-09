@@ -98,7 +98,7 @@ def edit_profile(request):
 
     if request.method == 'POST':
         user_form = UserUpdateForm(request.POST, instance=request.user)
-        profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=profile)
+        profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=profile)  # <-- request.FILES added
 
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
@@ -174,7 +174,7 @@ def apply_job(request, job_id):
 
     if request.method == 'POST':
         application = JobApplication(user=request.user, job=job)
-        form = JobApplicationForm(request.POST, request.FILES, instance=application)
+        form = JobApplicationForm(request.POST, request.FILES, instance=application)  # <-- request.FILES added
 
         if form.is_valid():
             form.save()
@@ -214,7 +214,7 @@ def admin_dashboard(request):
     profile, _ = Profile.objects.get_or_create(user=request.user)
 
     if request.method == 'POST':
-        form = ProfilePhotoForm(request.POST, request.FILES, instance=profile)
+        form = ProfilePhotoForm(request.POST, request.FILES, instance=profile)  # <-- request.FILES added
         if form.is_valid():
             form.save()
             return redirect('admin_dashboard')
@@ -247,7 +247,7 @@ def admin_jobs(request):
 @staff_member_required
 def admin_create_job(request):
     if request.method == "POST":
-        form = JobCreateForm(request.POST)
+        form = JobCreateForm(request.POST, request.FILES)  # <-- request.FILES added
         if form.is_valid():
             job = form.save(commit=False)
             job.posted_by = request.user
@@ -265,7 +265,7 @@ def edit_job(request, job_id):
     job = get_object_or_404(Job, id=job_id)
 
     if request.method == "POST":
-        form = JobCreateForm(request.POST, instance=job)
+        form = JobCreateForm(request.POST, request.FILES, instance=job)  # <-- request.FILES added
         if form.is_valid():
             form.save()
             messages.success(request, "Job updated successfully.")
@@ -373,5 +373,3 @@ def contact(request):
 def messages_list(request):
     messages_obj = ContactMessage.objects.all().order_by("-created_at")
     return render(request, "jobs/admin/message.html", {"messages": messages_obj})
-
-
