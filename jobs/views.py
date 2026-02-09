@@ -6,7 +6,6 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.urls import reverse_lazy
-from django.utils.decorators import method_decorator
 from django.contrib.auth.views import PasswordChangeView
 from .forms import (
     RegisterForm,
@@ -18,7 +17,7 @@ from .forms import (
     CustomPasswordChangeForm
 )
 from .models import Profile, Job, JobApplication, UserProfile, ContactMessage
-from django.http import HttpResponse
+
 
 # ==========================
 # HOME
@@ -98,7 +97,7 @@ def edit_profile(request):
 
     if request.method == 'POST':
         user_form = UserUpdateForm(request.POST, instance=request.user)
-        profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=profile)  # <-- request.FILES added
+        profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=profile)
 
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
@@ -111,7 +110,8 @@ def edit_profile(request):
 
     return render(request, 'jobs/edit_profile.html', {
         'user_form': user_form,
-        'profile_form': profile_form
+        'profile_form': profile_form,
+        'profile': profile  # Ensure template can safely access profile
     })
 
 
@@ -174,7 +174,7 @@ def apply_job(request, job_id):
 
     if request.method == 'POST':
         application = JobApplication(user=request.user, job=job)
-        form = JobApplicationForm(request.POST, request.FILES, instance=application)  # <-- request.FILES added
+        form = JobApplicationForm(request.POST, request.FILES, instance=application)
 
         if form.is_valid():
             form.save()
@@ -214,25 +214,21 @@ def admin_dashboard(request):
     profile, _ = Profile.objects.get_or_create(user=request.user)
 
     if request.method == 'POST':
-        form = ProfilePhotoForm(request.POST, request.FILES, instance=profile)  # <-- request.FILES added
+        form = ProfilePhotoForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
             return redirect('admin_dashboard')
     else:
         form = ProfilePhotoForm(instance=profile)
 
-    total_users = User.objects.count()
-    total_jobs = Job.objects.count()
-    total_applications = JobApplication.objects.count()
-    pending_jobs = Job.objects.filter(is_active=False).count()
-
     context = {
         'profile': profile,
         'form': form,
-        'total_users': total_users,
-        'total_jobs': total_jobs,
-        'total_applications': total_applications,
-        'pending_jobs': pending_jobs,
+        'total_users': User.objects.count(),
+        'total_jobs': Job.objects.count(),
+        'total_applications': JobApplication.objects.count(),
+        'pending_jobs': Job.objects.filter(is_active=False).count(),
+        'user': request.user
     }
 
     return render(request, 'jobs/admin/admin_dashboard.html', context)
@@ -247,7 +243,7 @@ def admin_jobs(request):
 @staff_member_required
 def admin_create_job(request):
     if request.method == "POST":
-        form = JobCreateForm(request.POST, request.FILES)  # <-- request.FILES added
+        form = JobCreateForm(request.POST, request.FILES)
         if form.is_valid():
             job = form.save(commit=False)
             job.posted_by = request.user
@@ -265,11 +261,11 @@ def edit_job(request, job_id):
     job = get_object_or_404(Job, id=job_id)
 
     if request.method == "POST":
-        form = JobCreateForm(request.POST, request.FILES, instance=job)  # <-- request.FILES added
+        form = JobCreateForm(request.POST, request.FILES, instance=job)
         if form.is_valid():
             form.save()
             messages.success(request, "Job updated successfully.")
-            return redirect("job_list")
+            return redirect("admin_jobs")
     else:
         form = JobCreateForm(instance=job)
 

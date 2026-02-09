@@ -11,9 +11,7 @@
         <h2 class="text-xl font-bold mb-6">Admin Panel</h2>
 
         <nav class="space-y-4">
-            <a href="{% url 'admin_dashboard' %}" class="block font-medium text-blue-600">
-                Dashboard
-            </a>
+            <a href="{% url 'admin_dashboard' %}" class="block font-medium text-blue-600">Dashboard</a>
             <a href="{% url 'admin_jobs' %}" class="block text-gray-700 hover:text-blue-600">Manage Jobs</a>
             <a href="{% url 'admin_applications' %}" class="block text-gray-700 hover:text-blue-600">Applications</a>
             <a href="{% url 'admin_users' %}" class="block text-gray-700 hover:text-blue-600">Users</a>
@@ -27,29 +25,26 @@
         <!-- ADMIN PROFILE -->
         <div class="bg-white rounded-xl shadow p-6 flex items-center gap-6">
             {% if profile.photo %}
-                <img
-                    src="{{ profile.photo.url }}"
-                    alt="Admin Photo"
-                    class="w-24 h-24 rounded-full object-cover border"
-                >
+                <img src="{{ profile.photo.url }}" alt="Admin Photo"
+                     class="w-24 h-24 rounded-full object-cover border">
             {% else %}
-                <img
-                    src="{% static 'images/default-avatar.png' %}"
-                    alt="Default Avatar"
-                    class="w-24 h-24 rounded-full border"
-                >
+                <img src="{% static 'images/default-avatar.png' %}" alt="Default Avatar"
+                     class="w-24 h-24 rounded-full object-cover border">
             {% endif %}
 
             <div class="flex-1">
-                <h2 class="text-2xl font-bold">{{ user.get_full_name|default:user.username }}</h2>
+                <h2 class="text-2xl font-bold">
+                    {{ user.get_full_name|default:user.username }}
+                </h2>
                 <p class="text-gray-600">Administrator</p>
                 <p class="text-sm text-gray-500">{{ user.email }}</p>
 
-                <!-- PHOTO UPLOAD -->
+                <!-- PROFILE PHOTO UPLOAD FORM -->
                 <form method="POST" enctype="multipart/form-data" class="mt-4" id="photoForm">
                     {% csrf_token %}
                     <input type="file" name="photo" id="photoInput" accept="image/*" class="hidden" onchange="document.getElementById('photoForm').submit();">
-                    <button type="button" onclick="document.getElementById('photoInput').click()" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm">
+                    <button type="button" onclick="document.getElementById('photoInput').click()"
+                            class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm">
                         Upload Photo
                     </button>
                 </form>
@@ -59,24 +54,24 @@
         <!-- PAGE TITLE -->
         <div>
             <h1 class="text-3xl font-bold">Admin Dashboard</h1>
-            <p class="text-gray-600">Overview & Management</p>
+            <p class="text-gray-600">Overview & management</p>
         </div>
 
         <!-- STATS -->
         <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
             <div class="bg-white rounded-xl shadow p-6">
                 <p class="text-gray-500">Total Users</p>
-                <p class="text-3xl font-bold mt-2">{{ total_users }}</p>
+                <p class="text-3xl font-bold mt-2">{{ total_users|default:"0" }}</p>
             </div>
 
             <div class="bg-white rounded-xl shadow p-6">
                 <p class="text-gray-500">Total Jobs</p>
-                <p class="text-3xl font-bold mt-2">{{ total_jobs }}</p>
+                <p class="text-3xl font-bold mt-2">{{ total_jobs|default:"0" }}</p>
             </div>
 
             <div class="bg-white rounded-xl shadow p-6">
                 <p class="text-gray-500">Applications</p>
-                <p class="text-3xl font-bold mt-2">{{ total_applications }}</p>
+                <p class="text-3xl font-bold mt-2">{{ total_applications|default:"0" }}</p>
             </div>
 
             <div class="bg-white rounded-xl shadow p-6">
@@ -85,48 +80,23 @@
             </div>
         </div>
 
-        <!-- JOB MANAGEMENT -->
-        <section class="bg-white rounded-xl shadow p-6">
-            <h2 class="text-xl font-semibold mb-4">Job Management</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <a href="{% url 'admin_jobs' %}" class="border rounded-lg p-4 hover:bg-gray-50 transition">Approve / Reject Jobs</a>
-                <a href="{% url 'admin_jobs' %}" class="border rounded-lg p-4 hover:bg-gray-50 transition">View All Jobs</a>
-                <a href="{% url 'admin_jobs' %}" class="border rounded-lg p-4 hover:bg-gray-50 transition">Delete Spam Jobs</a>
-            </div>
-        </section>
-
-        <!-- APPLICATION MANAGEMENT -->
-        <section class="bg-white rounded-xl shadow p-6">
-            <h2 class="text-xl font-semibold mb-4">Application Management</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <a href="{% url 'admin_applications' %}" class="border rounded-lg p-4 hover:bg-gray-50 transition">View Applications</a>
-                <a href="#" class="border rounded-lg p-4 hover:bg-gray-50 transition">Download CVs</a>
-                <a href="#" class="border rounded-lg p-4 hover:bg-gray-50 transition">Filter by Job</a>
-            </div>
-        </section>
-
-        <!-- USER MANAGEMENT -->
-        <section class="bg-white rounded-xl shadow p-6">
-            <h2 class="text-xl font-semibold mb-4">User Management</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <a href="{% url 'admin_users' %}" class="border rounded-lg p-4 hover:bg-gray-50 transition">View Users</a>
-                <a href="{% url 'admin_users' %}" class="border rounded-lg p-4 hover:bg-gray-50 transition">Block / Unblock Users</a>
-                <a href="#" class="border rounded-lg p-4 hover:bg-gray-50 transition">Admin Roles</a>
-            </div>
-        </section>
-
         <!-- QUICK ACTIONS -->
         <section class="bg-white rounded-xl shadow p-6">
             <h2 class="text-xl font-semibold mb-4">Quick Actions</h2>
             <div class="flex flex-wrap gap-4">
-                <a href="{% url 'admin_create_job' %}" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Create Job</a>
-                <a href="#" class="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-900">View Reports</a>
+                <a href="{% url 'admin_create_job' %}" class="px-4 py-2 bg-blue-600 text-white rounded-lg">
+                    Create Job
+                </a>
+                <a href="#" class="px-4 py-2 bg-gray-800 text-white rounded-lg">
+                    View Reports
+                </a>
             </div>
         </section>
 
-        <!-- BACK BUTTON -->
-        <div class="mt-4">
-            <a href="{% url 'home' %}" class="px-4 py-2 bg-indigo-800 text-white rounded-lg hover:bg-indigo-700">Back to Home</a>
+        <div class="mt-2">
+            <a href="{% url 'home' %}" class="px-4 py-2 bg-indigo-800 text-white rounded-lg hover:bg-indigo-700">
+                Back to Home
+            </a>
         </div>
 
     </main>
