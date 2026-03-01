@@ -76,6 +76,18 @@
                     Sign In
                 </button>
             </form>
+            <!-- login.html -->
+{% if messages %}
+  <div class="mb-4">
+    {% for message in messages %}
+      <div class="px-4 py-2 rounded
+          {% if message.tags == 'success' %}bg-green-500 text-white{% endif %}
+          {% if message.tags == 'error' %}bg-red-500 text-white{% endif %}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
 
             <!-- Sign Up Link -->
             <p class="text-center text-sm text-gray-600 mt-4">
