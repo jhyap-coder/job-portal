@@ -321,6 +321,24 @@ def toggle_user(request, id):
     user.save()
     return redirect("admin_users")
 
+@staff_member_required
+def delete_user(request, id):
+    user = get_object_or_404(User, id=id)
+
+    # Prevent deleting superuser
+    if user.is_superuser:
+        messages.error(request, "Superuser cannot be deleted.")
+        return redirect("admin_users")
+
+    # Prevent deleting yourself
+    if user == request.user:
+        messages.error(request, "You cannot delete your own account.")
+        return redirect("admin_users")
+
+    user.delete()
+    messages.success(request, "User deleted successfully.")
+    return redirect("admin_users")
+
 
 # ==========================
 # CHANGE PASSWORD
