@@ -55,7 +55,7 @@ def register(request):
         )
 
         messages.success(request, "Account created successfully.")
-        return redirect('login')
+        return redirect('jobs/register.html')
 
     return render(request, 'jobs/register.html')
 
