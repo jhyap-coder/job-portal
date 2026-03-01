@@ -18,6 +18,18 @@
                 <h2 class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Welcome Back</h2>
                 <p class="text-gray-500 mt-2">Please sign in to continue</p>
             </div>
+            <div id="messages-container">
+  {% if messages %}
+    {% for message in messages %}
+      <div class="px-4 py-2 rounded
+          {% if message.tags == 'success' %}bg-green-500 text-white{% endif %}
+          {% if message.tags == 'error' %}bg-red-500 text-white{% endif %}
+          {% if message.tags == 'warning' %}bg-yellow-500 text-black{% endif %}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+</div>
 
             <form method="POST" class="space-y-6">
                 {% csrf_token %}
@@ -77,17 +89,7 @@
                 </button>
             </form>
             <!-- login.html -->
-{% if messages %}
-  <div class="mb-4">
-    {% for message in messages %}
-      <div class="px-4 py-2 rounded
-          {% if message.tags == 'success' %}bg-green-500 text-white{% endif %}
-          {% if message.tags == 'error' %}bg-red-500 text-white{% endif %}">
-        {{ message }}
-      </div>
-    {% endfor %}
-  </div>
-{% endif %}
+
 
             <!-- Sign Up Link -->
             <p class="text-center text-sm text-gray-600 mt-4">
@@ -102,4 +104,16 @@
         lucide.createIcons();
     </script>
 </div>
+<script>
+  // Wait 3 seconds then fade out messages
+  setTimeout(function() {
+    const messages = document.getElementById('messages-container');
+    if (messages) {
+      messages.style.transition = "opacity 0.5s ease-out";
+      messages.style.opacity = "0";
+      // Remove from DOM after fade
+      setTimeout(() => { messages.remove(); }, 500);
+    }
+  }, 3000); // 3000ms = 3 seconds
+</script>
 {% endblock %}
