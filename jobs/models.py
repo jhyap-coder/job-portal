@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
+from cloudinary.models import CloudinaryField
 
 class UserProfile(models.Model):
     ROLE_CHOICES = (
@@ -20,7 +21,7 @@ class UserProfile(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    photo = models.ImageField(upload_to="profiles/", blank=True, null=True)
+    photo = CloudinaryField('profile_photo', blank=True, null=True)
     phone = models.CharField(max_length=15, blank=True)
     location = models.CharField(max_length=100, blank=True)
     bio = models.TextField(blank=True)
@@ -73,16 +74,9 @@ class JobApplication(models.Model):
     email = models.EmailField()
     phone = models.CharField(max_length=15)
 
-    photo = models.ImageField(
-        upload_to='application_photos/',
-        blank=True,
-        null=True
-    )
-    resume = models.FileField(
-        upload_to='resumes/',
-        blank=True,
-        null=True
-    )
+    photo = CloudinaryField('application_photo', blank=True, null=True)
+
+    resume = CloudinaryField('resume', resource_type='raw', blank=True, null=True)
 
     applied_at = models.DateTimeField(default=timezone.now)
 
