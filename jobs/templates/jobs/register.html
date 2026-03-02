@@ -61,19 +61,38 @@
                             class="w-full px-3 py-2 border rounded focus:outline-none">
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                        <div>
-                            <label class="block text-sm font-bold text-gray-700 dark:text-white">Password</label>
-                            <input type="password" name="password"
-                                class="w-full px-3 py-2 border rounded focus:outline-none">
-                        </div>
+                    <!-- Password -->
+<div>
+  <label>Password</label>
+  <input type="password" id="password" name="password" minlength="8"
+         class="w-full px-3 py-2 border rounded focus:outline-none">
 
-                        <div>
-                            <label class="block text-sm font-bold text-gray-700 dark:text-white">Confirm Password</label>
-                            <input type="password" name="confirm_password"
-                                class="w-full px-3 py-2 border rounded focus:outline-none">
-                        </div>
-                    </div>
+  <!-- Strength Bar (Hidden Initially) -->
+  <div id="strength-container" class="mt-2 hidden">
+      <div class="w-full bg-gray-200 rounded">
+          <div id="strength-bar" class="h-2 rounded"></div>
+      </div>
+      <p id="strength-text" class="text-sm mt-1"></p>
+  </div>
+
+  <!-- Checklist -->
+  <ul class="text-sm mt-2 space-y-1" id="password-checklist">
+      <li id="check-length" class="text-gray-500">✖ At least 8 characters</li>
+      <li id="check-lower" class="text-gray-500">✖ Lowercase letter</li>
+      <li id="check-upper" class="text-gray-500">✖ Uppercase letter</li>
+      <li id="check-number" class="text-gray-500">✖ Number</li>
+      <li id="check-special" class="text-gray-500">✖ Special character (@$!%*?&)</li>
+  </ul>
+</div>
+
+<!-- Confirm Password -->
+<div class="mt-4">
+  <label>Confirm Password</label>
+  <input type="password" id="confirm-password"
+         class="w-full px-3 py-2 border rounded focus:outline-none">
+
+  <p id="match-text" class="text-sm mt-1"></p>
+</div>
 
                     <button type="submit"
                         class="w-full mt-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
@@ -93,15 +112,119 @@
     </div>
 </div>
 <script>
-  // Wait 3 seconds then fade out messages
+document.addEventListener("DOMContentLoaded", function () {
+
+  // Auto-hide messages
   setTimeout(function() {
     const messages = document.getElementById('messages-container');
     if (messages) {
       messages.style.transition = "opacity 0.5s ease-out";
       messages.style.opacity = "0";
-      // Remove from DOM after fade
       setTimeout(() => { messages.remove(); }, 500);
     }
-  }, 3000); // 3000ms = 3 seconds
+  }, 3000);
+
+  const passwordInput = document.getElementById("password");
+  const confirmInput = document.getElementById("confirm-password");
+
+  const strengthContainer = document.getElementById("strength-container");
+  const strengthBar = document.getElementById("strength-bar");
+  const strengthText = document.getElementById("strength-text");
+  const matchText = document.getElementById("match-text");
+
+  const checks = {
+    length: document.getElementById("check-length"),
+    lower: document.getElementById("check-lower"),
+    upper: document.getElementById("check-upper"),
+    number: document.getElementById("check-number"),
+    special: document.getElementById("check-special"),
+  };
+
+  function updateChecklist(condition, element) {
+    if (condition) {
+      element.textContent = element.textContent.replace("✖", "✔");
+      element.classList.remove("text-gray-500");
+      element.classList.add("text-green-600");
+    } else {
+      element.textContent = element.textContent.replace("✔", "✖");
+      element.classList.remove("text-green-600");
+      element.classList.add("text-gray-500");
+    }
+  }
+
+  function checkPasswordMatch() {
+    if (!confirmInput.value) {
+      matchText.textContent = "";
+      return;
+    }
+
+    if (passwordInput.value === confirmInput.value) {
+      matchText.textContent = "✔ Passwords match";
+      matchText.className = "text-sm mt-1 text-green-600";
+    } else {
+      matchText.textContent = "✖ Passwords do not match";
+      matchText.className = "text-sm mt-1 text-red-600";
+    }
+  }
+
+  if (passwordInput) {
+    passwordInput.addEventListener("input", function () {
+
+      const value = passwordInput.value;
+
+      // Show strength only when typing
+      if (value.length > 0) {
+        strengthContainer.classList.remove("hidden");
+      } else {
+        strengthContainer.classList.add("hidden");
+      }
+
+      let strength = 0;
+
+      const hasLength = value.length >= 8;
+      const hasLower = /[a-z]/.test(value);
+      const hasUpper = /[A-Z]/.test(value);
+      const hasNumber = /[0-9]/.test(value);
+      const hasSpecial = /[@$!%*?&]/.test(value);
+
+      updateChecklist(hasLength, checks.length);
+      updateChecklist(hasLower, checks.lower);
+      updateChecklist(hasUpper, checks.upper);
+      updateChecklist(hasNumber, checks.number);
+      updateChecklist(hasSpecial, checks.special);
+
+      if (hasLength) strength++;
+      if (hasLower) strength++;
+      if (hasUpper) strength++;
+      if (hasNumber) strength++;
+      if (hasSpecial) strength++;
+
+      strengthBar.style.transition = "all 0.3s ease";
+
+      if (strength <= 2) {
+        strengthBar.style.width = "33%";
+        strengthBar.className = "h-2 rounded bg-red-500";
+        strengthText.textContent = "Weak";
+      } 
+      else if (strength <= 4) {
+        strengthBar.style.width = "66%";
+        strengthBar.className = "h-2 rounded bg-yellow-500";
+        strengthText.textContent = "Medium";
+      } 
+      else {
+        strengthBar.style.width = "100%";
+        strengthBar.className = "h-2 rounded bg-green-500";
+        strengthText.textContent = "Strong";
+      }
+
+      checkPasswordMatch();
+    });
+  }
+
+  if (confirmInput) {
+    confirmInput.addEventListener("input", checkPasswordMatch);
+  }
+
+});
 </script>
 {% endblock %}

@@ -17,7 +17,9 @@ from .forms import (
     CustomPasswordChangeForm
 )
 from .models import Profile, Job, JobApplication, UserProfile, ContactMessage
-
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
+import re
 
 # ==========================
 # HOME
@@ -34,18 +36,30 @@ def register(request):
     if request.method == 'POST':
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
-        email = request.POST.get('email')
+        email = request.POST.get('email').strip()
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
 
+        # Check password match
         if password != confirm_password:
             messages.error(request, "Passwords do not match.")
             return redirect('register')
 
+        # Strong password validation
+        pattern = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$'
+        if not re.match(pattern, password):
+            messages.error(
+                request,
+                "Password must contain 8+ characters, uppercase, lowercase, number and special character."
+            )
+            return redirect('register')
+
+        # Check existing email
         if User.objects.filter(username=email).exists():
             messages.error(request, "Email already registered.")
             return redirect('register')
 
+        # Create user
         User.objects.create_user(
             username=email,
             email=email,
@@ -387,3 +401,5 @@ def contact(request):
 def messages_list(request):
     messages_obj = ContactMessage.objects.all().order_by("-created_at")
     return render(request, "jobs/admin/message.html", {"messages": messages_obj})
+
+
