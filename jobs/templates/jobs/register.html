@@ -1,230 +1,265 @@
-{% extends 'jobs/base.html' %}
-
-{% block title %}Register{% endblock %}
-
-{% block content %}
+{% extends 'jobs/base.html' %} {% block title %}Register{% endblock %} {% block
+content %}
 <!-- NAVBAR START -->
-<div class="min-h-screen bg-gray-400 dark:bg-gray-900 flex items-center justify-center">
-    <div class="w-full max-w-5xl px-6 py-12">
-        <div class="flex flex-wrap bg-white dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden">
+<div
+  class="min-h-screen bg-gray-400 dark:bg-gray-900 flex items-center justify-center"
+>
+  <div class="w-full max-w-5xl px-6 py-12">
+    <div
+      class="flex flex-wrap bg-white dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden"
+    >
+      <!-- Image Section -->
+      <div
+        class="hidden lg:block lg:w-4/12 bg-cover"
+        style="
+          background-image: url(&quot;https://images.unsplash.com/photo-1525095182007-3874c4e2b38b?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NjJ8fGJ1c2luZXNzfGVufDB8fDB8fHww&quot;);
+        "
+      ></div>
 
-            <!-- Image Section -->
-            <div class="hidden lg:block lg:w-5/12 bg-cover"
-                style="background-image: url('https://images.unsplash.com/photo-1525095182007-3874c4e2b38b?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NjJ8fGJ1c2luZXNzfGVufDB8fDB8fHww')">
+      <!-- Form Section -->
+      <div class="w-full lg:w-8/12 p-8">
+        <h3
+          class="text-2xl font-bold text-center text-gray-800 dark:text-white mb-6"
+        >
+          Create an Account
+        </h3>
+        <div id="messages-container">
+          {% if messages %}
+          <div class="mb-4">
+            {% for message in messages %}
+            <div
+              class="px-4 py-2 rounded {% if message.tags == 'success' %}bg-green-500 text-white{% endif %} {% if message.tags == 'error' %}bg-red-500 text-white{% endif %} {% if message.tags == 'warning' %}bg-yellow-500 text-black{% endif %}"
+            >
+              {{ message }}
             </div>
-
-            <!-- Form Section -->
-            <div class="w-full lg:w-7/12 p-8">
-                <h3 class="text-2xl font-bold text-center text-gray-800 dark:text-white mb-6">
-                    Create an Account
-                </h3>
-<div id="messages-container">
-{% if messages %}
-  <div class="mb-4">
-    {% for message in messages %}
-      <div class="px-4 py-2 rounded
-          {% if message.tags == 'success' %}bg-green-500 text-white{% endif %}
-          {% if message.tags == 'error' %}bg-red-500 text-white{% endif %}
-          {% if message.tags == 'warning' %}bg-yellow-500 text-black{% endif %}">
-        {{ message }}
-      </div>
-    {% endfor %}
-  </div>
-{% endif %}
-</div>
-
-                <form method="post" class="bg-white dark:bg-gray-800 p-6 rounded">
-                    {% csrf_token %}
-
-                    <!-- Errors will now show in base.html, so we remove here -->
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-bold text-gray-700 dark:text-white">First Name</label>
-                            <input type="text" name="first_name" required
-                                value="{{ request.POST.first_name|default:'' }}"
-                                class="w-full px-3 py-2 border rounded focus:outline-none">
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-bold text-gray-700 dark:text-white">Last Name</label>
-                            <input type="text" name="last_name"
-                                value="{{ request.POST.last_name|default:'' }}"
-                                class="w-full px-3 py-2 border rounded focus:outline-none">
-                        </div>
-                    </div>
-
-                    <div class="mt-4">
-                        <label class="block text-sm font-bold text-gray-700 dark:text-white">Email</label>
-                        <input type="email" name="email" required
-                            value="{{ request.POST.email|default:'' }}"
-                            class="w-full px-3 py-2 border rounded focus:outline-none">
-                    </div>
-
-                    <!-- Password -->
-<div>
-  <label>Password</label>
-  <input type="password" id="password" name="password" minlength="8"
-         class="w-full px-3 py-2 border rounded focus:outline-none">
-
-  <!-- Strength Bar (Hidden Initially) -->
-  <div id="strength-container" class="mt-2 hidden">
-      <div class="w-full bg-gray-200 rounded">
-          <div id="strength-bar" class="h-2 rounded"></div>
-      </div>
-      <p id="strength-text" class="text-sm mt-1"></p>
-  </div>
-
-  <!-- Checklist -->
-  <ul class="text-sm mt-2 space-y-1" id="password-checklist">
-      <li id="check-length" class="text-gray-500">✖ At least 8 characters</li>
-      <li id="check-lower" class="text-gray-500">✖ Lowercase letter</li>
-      <li id="check-upper" class="text-gray-500">✖ Uppercase letter</li>
-      <li id="check-number" class="text-gray-500">✖ Number</li>
-      <li id="check-special" class="text-gray-500">✖ Special character (@$!%*?&)</li>
-  </ul>
-</div>
-
-<!-- Confirm Password -->
-<div class="mt-4">
-  <label>Confirm Password</label>
-  <input type="password" id="confirm-password"
-         class="w-full px-3 py-2 border rounded focus:outline-none">
-
-  <p id="match-text" class="text-sm mt-1"></p>
-</div>
-
-                    <button type="submit"
-                        class="w-full mt-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-                        Register Account
-                    </button>
-
-                    <div class="text-center mt-4">
-                        <a href="{% url 'login' %}" class="text-sm text-blue-500 hover:underline">
-                            Already have an account? Login
-                        </a>
-                    </div>
-
-                </form>
-            </div>
-
+            {% endfor %}
+          </div>
+          {% endif %}
         </div>
+
+        <form method="post" class="bg-white dark:bg-gray-800 p-6 rounded">
+          {% csrf_token %}
+
+          <!-- Errors will now show in base.html, so we remove here -->
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label
+                class="block text-sm font-bold text-gray-700 dark:text-white"
+                >First Name</label
+              >
+              <input
+                type="text"
+                name="first_name"
+                required
+                value="{{ request.POST.first_name|default:'' }}"
+                class="w-full px-3 py-2 border rounded focus:outline-none"
+              />
+            </div>
+
+            <div>
+              <label
+                class="block text-sm font-bold text-gray-700 dark:text-white"
+                >Last Name</label
+              >
+              <input
+                type="text"
+                name="last_name"
+                value="{{ request.POST.last_name|default:'' }}"
+                class="w-full px-3 py-2 border rounded focus:outline-none"
+              />
+            </div>
+          </div>
+
+          <div class="mt-4">
+            <label class="block text-sm font-bold text-gray-700 dark:text-white"
+              >Email</label
+            >
+            <input
+              type="email"
+              name="email"
+              required
+              value="{{ request.POST.email|default:'' }}"
+              class="w-full px-3 py-2 border rounded focus:outline-none"
+            />
+          </div>
+
+          <!-- Password -->
+          <div>
+            <label>Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              minlength="8"
+              class="w-full px-3 py-2 border rounded focus:outline-none"
+            />
+
+            <!-- Strength Bar (Hidden Initially) -->
+            <div id="strength-container" class="mt-2 hidden">
+              <div class="w-full bg-gray-200 rounded">
+                <div id="strength-bar" class="h-2 rounded"></div>
+              </div>
+              <p id="strength-text" class="text-sm mt-1"></p>
+            </div>
+
+            <!-- Checklist -->
+            <ul class="text-sm mt-2 space-y-1" id="password-checklist">
+              <li id="check-length" class="text-gray-500">
+                ✖ At least 8 characters
+              </li>
+              <li id="check-lower" class="text-gray-500">✖ Lowercase letter</li>
+              <li id="check-upper" class="text-gray-500">✖ Uppercase letter</li>
+              <li id="check-number" class="text-gray-500">✖ Number</li>
+              <li id="check-special" class="text-gray-500">
+                ✖ Special character (@$!%*?&)
+              </li>
+            </ul>
+          </div>
+
+          <!-- Confirm Password -->
+          <div class="mt-4">
+            <label>Confirm Password</label>
+            <input
+              type="password"
+              id="confirm-password"
+              class="w-full px-3 py-2 border rounded focus:outline-none"
+            />
+
+            <p id="match-text" class="text-sm mt-1"></p>
+          </div>
+
+          <button
+            type="submit"
+            class="w-full mt-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
+            Register Account
+          </button>
+
+          <div class="text-center mt-4">
+            <a
+              href="{% url 'login' %}"
+              class="text-sm text-blue-500 hover:underline"
+            >
+              Already have an account? Login
+            </a>
+          </div>
+        </form>
+      </div>
     </div>
+  </div>
 </div>
 <script>
-document.addEventListener("DOMContentLoaded", function () {
+  document.addEventListener("DOMContentLoaded", function () {
+    // Auto-hide messages
+    setTimeout(function () {
+      const messages = document.getElementById("messages-container");
+      if (messages) {
+        messages.style.transition = "opacity 0.5s ease-out";
+        messages.style.opacity = "0";
+        setTimeout(() => {
+          messages.remove();
+        }, 500);
+      }
+    }, 3000);
 
-  // Auto-hide messages
-  setTimeout(function() {
-    const messages = document.getElementById('messages-container');
-    if (messages) {
-      messages.style.transition = "opacity 0.5s ease-out";
-      messages.style.opacity = "0";
-      setTimeout(() => { messages.remove(); }, 500);
-    }
-  }, 3000);
+    const passwordInput = document.getElementById("password");
+    const confirmInput = document.getElementById("confirm-password");
 
-  const passwordInput = document.getElementById("password");
-  const confirmInput = document.getElementById("confirm-password");
+    const strengthContainer = document.getElementById("strength-container");
+    const strengthBar = document.getElementById("strength-bar");
+    const strengthText = document.getElementById("strength-text");
+    const matchText = document.getElementById("match-text");
 
-  const strengthContainer = document.getElementById("strength-container");
-  const strengthBar = document.getElementById("strength-bar");
-  const strengthText = document.getElementById("strength-text");
-  const matchText = document.getElementById("match-text");
+    const checks = {
+      length: document.getElementById("check-length"),
+      lower: document.getElementById("check-lower"),
+      upper: document.getElementById("check-upper"),
+      number: document.getElementById("check-number"),
+      special: document.getElementById("check-special"),
+    };
 
-  const checks = {
-    length: document.getElementById("check-length"),
-    lower: document.getElementById("check-lower"),
-    upper: document.getElementById("check-upper"),
-    number: document.getElementById("check-number"),
-    special: document.getElementById("check-special"),
-  };
-
-  function updateChecklist(condition, element) {
-    if (condition) {
-      element.textContent = element.textContent.replace("✖", "✔");
-      element.classList.remove("text-gray-500");
-      element.classList.add("text-green-600");
-    } else {
-      element.textContent = element.textContent.replace("✔", "✖");
-      element.classList.remove("text-green-600");
-      element.classList.add("text-gray-500");
-    }
-  }
-
-  function checkPasswordMatch() {
-    if (!confirmInput.value) {
-      matchText.textContent = "";
-      return;
-    }
-
-    if (passwordInput.value === confirmInput.value) {
-      matchText.textContent = "✔ Passwords match";
-      matchText.className = "text-sm mt-1 text-green-600";
-    } else {
-      matchText.textContent = "✖ Passwords do not match";
-      matchText.className = "text-sm mt-1 text-red-600";
-    }
-  }
-
-  if (passwordInput) {
-    passwordInput.addEventListener("input", function () {
-
-      const value = passwordInput.value;
-
-      // Show strength only when typing
-      if (value.length > 0) {
-        strengthContainer.classList.remove("hidden");
+    function updateChecklist(condition, element) {
+      if (condition) {
+        element.textContent = element.textContent.replace("✖", "✔");
+        element.classList.remove("text-gray-500");
+        element.classList.add("text-green-600");
       } else {
-        strengthContainer.classList.add("hidden");
+        element.textContent = element.textContent.replace("✔", "✖");
+        element.classList.remove("text-green-600");
+        element.classList.add("text-gray-500");
+      }
+    }
+
+    function checkPasswordMatch() {
+      if (!confirmInput.value) {
+        matchText.textContent = "";
+        return;
       }
 
-      let strength = 0;
-
-      const hasLength = value.length >= 8;
-      const hasLower = /[a-z]/.test(value);
-      const hasUpper = /[A-Z]/.test(value);
-      const hasNumber = /[0-9]/.test(value);
-      const hasSpecial = /[@$!%*?&]/.test(value);
-
-      updateChecklist(hasLength, checks.length);
-      updateChecklist(hasLower, checks.lower);
-      updateChecklist(hasUpper, checks.upper);
-      updateChecklist(hasNumber, checks.number);
-      updateChecklist(hasSpecial, checks.special);
-
-      if (hasLength) strength++;
-      if (hasLower) strength++;
-      if (hasUpper) strength++;
-      if (hasNumber) strength++;
-      if (hasSpecial) strength++;
-
-      strengthBar.style.transition = "all 0.3s ease";
-
-      if (strength <= 2) {
-        strengthBar.style.width = "33%";
-        strengthBar.className = "h-2 rounded bg-red-500";
-        strengthText.textContent = "Weak";
-      } 
-      else if (strength <= 4) {
-        strengthBar.style.width = "66%";
-        strengthBar.className = "h-2 rounded bg-yellow-500";
-        strengthText.textContent = "Medium";
-      } 
-      else {
-        strengthBar.style.width = "100%";
-        strengthBar.className = "h-2 rounded bg-green-500";
-        strengthText.textContent = "Strong";
+      if (passwordInput.value === confirmInput.value) {
+        matchText.textContent = "✔ Passwords match";
+        matchText.className = "text-sm mt-1 text-green-600";
+      } else {
+        matchText.textContent = "✖ Passwords do not match";
+        matchText.className = "text-sm mt-1 text-red-600";
       }
+    }
 
-      checkPasswordMatch();
-    });
-  }
+    if (passwordInput) {
+      passwordInput.addEventListener("input", function () {
+        const value = passwordInput.value;
 
-  if (confirmInput) {
-    confirmInput.addEventListener("input", checkPasswordMatch);
-  }
+        // Show strength only when typing
+        if (value.length > 0) {
+          strengthContainer.classList.remove("hidden");
+        } else {
+          strengthContainer.classList.add("hidden");
+        }
 
-});
+        let strength = 0;
+
+        const hasLength = value.length >= 8;
+        const hasLower = /[a-z]/.test(value);
+        const hasUpper = /[A-Z]/.test(value);
+        const hasNumber = /[0-9]/.test(value);
+        const hasSpecial = /[@$!%*?&]/.test(value);
+
+        updateChecklist(hasLength, checks.length);
+        updateChecklist(hasLower, checks.lower);
+        updateChecklist(hasUpper, checks.upper);
+        updateChecklist(hasNumber, checks.number);
+        updateChecklist(hasSpecial, checks.special);
+
+        if (hasLength) strength++;
+        if (hasLower) strength++;
+        if (hasUpper) strength++;
+        if (hasNumber) strength++;
+        if (hasSpecial) strength++;
+
+        strengthBar.style.transition = "all 0.3s ease";
+
+        if (strength <= 2) {
+          strengthBar.style.width = "33%";
+          strengthBar.className = "h-2 rounded bg-red-500";
+          strengthText.textContent = "Weak";
+        } else if (strength <= 4) {
+          strengthBar.style.width = "66%";
+          strengthBar.className = "h-2 rounded bg-yellow-500";
+          strengthText.textContent = "Medium";
+        } else {
+          strengthBar.style.width = "100%";
+          strengthBar.className = "h-2 rounded bg-green-500";
+          strengthText.textContent = "Strong";
+        }
+
+        checkPasswordMatch();
+      });
+    }
+
+    if (confirmInput) {
+      confirmInput.addEventListener("input", checkPasswordMatch);
+    }
+  });
 </script>
 {% endblock %}
