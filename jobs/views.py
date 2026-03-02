@@ -34,11 +34,11 @@ def home(request):
 # ==========================
 def register(request):
     if request.method == 'POST':
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        email = request.POST.get('email').strip()
-        password = request.POST.get('password')
-        confirm_password = request.POST.get('confirm_password')
+        first_name = request.POST.get('first_name', '').strip()
+        last_name = request.POST.get('last_name', '').strip()
+        email = request.POST.get('email', '').strip()
+        password = request.POST.get('password', '')
+        confirm_password = request.POST.get('confirm_password', '')
 
         # Check password match
         if password != confirm_password:
@@ -47,11 +47,8 @@ def register(request):
 
         # Strong password validation
         pattern = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$'
-        if not re.match(pattern, password):
-            messages.error(
-                request,
-                "Password must contain 8+ characters, uppercase, lowercase, number and special character."
-            )
+        if not password or not re.match(pattern, password):
+            messages.error(request, "Password must contain 8+ chars, uppercase, lowercase, number & special char.")
             return redirect('register')
 
         # Check existing email
@@ -59,17 +56,19 @@ def register(request):
             messages.error(request, "Email already registered.")
             return redirect('register')
 
-        # Create user
-        User.objects.create_user(
-            username=email,
-            email=email,
-            password=password,
-            first_name=first_name,
-            last_name=last_name
-        )
-
-        messages.success(request, "Account created successfully.")
-        return redirect('login')
+        try:
+            User.objects.create_user(
+                username=email,
+                email=email,
+                password=password,
+                first_name=first_name,
+                last_name=last_name
+            )
+            messages.success(request, "Account created successfully.")
+            return redirect('login')
+        except Exception as e:
+            messages.error(request, f"Server error: {str(e)}")
+            return redirect('register')
 
     return render(request, 'jobs/register.html')
 
