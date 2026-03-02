@@ -40,18 +40,19 @@ def register(request):
         password = request.POST.get('password', '')
         confirm_password = request.POST.get('confirm_password', '')
 
-        # Check password match
+        if not email:
+            messages.error(request, "Email is required.")
+            return redirect('register')
+
         if password != confirm_password:
             messages.error(request, "Passwords do not match.")
             return redirect('register')
 
-        # Strong password validation
         pattern = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$'
-        if not password or not re.match(pattern, password):
+        if not re.match(pattern, password):
             messages.error(request, "Password must contain 8+ chars, uppercase, lowercase, number & special char.")
             return redirect('register')
 
-        # Check existing email
         if User.objects.filter(username=email).exists():
             messages.error(request, "Email already registered.")
             return redirect('register')
@@ -67,7 +68,8 @@ def register(request):
             messages.success(request, "Account created successfully.")
             return redirect('login')
         except Exception as e:
-            messages.error(request, f"Server error: {str(e)}")
+            print("Register Error:", e)  # Log exact error
+            messages.error(request, "Server error, please contact admin.")
             return redirect('register')
 
     return render(request, 'jobs/register.html')
