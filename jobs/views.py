@@ -58,18 +58,26 @@ def register(request):
             return redirect('register')
 
         try:
-            User.objects.create_user(
+            # Create User instance safely
+            user = User.objects.create_user(
                 username=email,
                 email=email,
                 password=password,
                 first_name=first_name,
                 last_name=last_name
             )
+
+            # Create related UserProfile and Profile
+            UserProfile.objects.create(user=user, role='jobseeker')
+            Profile.objects.create(user=user)
+
             messages.success(request, "Account created successfully.")
             return redirect('login')
+
         except Exception as e:
-            print("Register Error:", e)  # Log exact error
-            messages.error(request, "Server error, please contact admin.")
+            import traceback
+            traceback.print_exc()  # Prints full error in console
+            messages.error(request, f"Server error: {e}")
             return redirect('register')
 
     return render(request, 'jobs/register.html')
