@@ -108,7 +108,14 @@ class JobApplication(models.Model):
 
 
 # Signal: automatically create UserProfile for each new User
-
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        UserProfile.objects.create(
+            user=instance,
+            role='jobseeker'
+        )
+        Profile.objects.create(user=instance)
 
 class ContactMessage(models.Model):
     name = models.CharField(max_length=100)

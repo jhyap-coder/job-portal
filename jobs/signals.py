@@ -4,12 +4,14 @@ from django.contrib.auth.models import User
 from .models import UserProfile, Profile
 
 @receiver(post_save, sender=User)
-def create_user_related_models(sender, instance, created, **kwargs):
+def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        UserProfile.objects.get_or_create(
-            user=instance,
-            defaults={'role': 'jobseeker'}
-        )
+        UserProfile.objects.get_or_create(user=instance)
+
+
+@receiver(post_save, sender=User)
+def create_profile(sender, instance, created, **kwargs):
+    if created:
         Profile.objects.get_or_create(user=instance)
 
 
