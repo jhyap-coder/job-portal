@@ -126,29 +126,32 @@ class JobCreateForm(forms.ModelForm):
         }
 
 class CustomPasswordChangeForm(PasswordChangeForm):
-    old_password = forms.CharField(
-        label="Current Password",
-        widget=forms.PasswordInput(attrs={
-            'placeholder': 'Enter current password',
-            'class': 'w-full border rounded px-3 py-2'
-        })
-    )
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
-    new_password1 = forms.CharField(
-        label="New Password",
-        widget=forms.PasswordInput(attrs={
-            'placeholder': 'Enter new password',
-            'class': 'w-full border rounded px-3 py-2'
-        })
-    )
+        common_class = (
+            "w-full px-4 py-3 pr-16 rounded-xl border border-gray-300 "
+            "focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 "
+            "bg-white text-gray-800"
+        )
 
-    new_password2 = forms.CharField(
-        label="Confirm New Password",
-        widget=forms.PasswordInput(attrs={
-            'placeholder': 'Confirm new password',
-            'class': 'w-full border rounded px-3 py-2'
+        self.fields['old_password'].widget.attrs.update({
+            'class': common_class,
+            'placeholder': 'Enter your current password',
+            'id': 'id_old_password'
         })
-    )
+
+        self.fields['new_password1'].widget.attrs.update({
+            'class': common_class,
+            'placeholder': 'Enter your new password',
+            'id': 'id_new_password1'
+        })
+
+        self.fields['new_password2'].widget.attrs.update({
+            'class': common_class,
+            'placeholder': 'Confirm your new password',
+            'id': 'id_new_password2'
+        })
 
 
 class TestimonialForm(forms.ModelForm):

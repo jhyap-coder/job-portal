@@ -77,8 +77,9 @@ path('dashboard/admin/testimonials/<int:id>/delete/', views.delete_testimonial, 
     ), name='password_change'),
 
     path('password-change-done/', auth_views.PasswordChangeDoneView.as_view(
-        template_name='jobs/password_change.html'
+        template_name='jobs/password_done.html'
     ), name='password_change_done'),
+
     path('submit-testimonial/', views.submit_testimonial, name='submit_testimonial'),
 
     
