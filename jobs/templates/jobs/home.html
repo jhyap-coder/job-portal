@@ -6,272 +6,412 @@
 {% block content %}
 
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-    
-    * {
-        font-family: 'Inter', sans-serif;
-    }
+  @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
 
-    .gradient-bg {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    }
+  * {
+    font-family: "Inter", sans-serif;
+  }
 
-    .glass-effect {
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-    }
+  .gradient-bg {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  }
 
-    .floating {
-        animation: floating 3s ease-in-out infinite;
-    }
+  .glass-effect {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
 
-    .floating-delayed {
-        animation: floating 3s ease-in-out infinite;
-        animation-delay: 1.5s;
-    }
+  .floating {
+    animation: floating 3s ease-in-out infinite;
+  }
 
-    @keyframes floating {
-        0%, 100% { transform: translateY(0px); }
-        50% { transform: translateY(-20px); }
-    }
+  .floating-delayed {
+    animation: floating 3s ease-in-out infinite;
+    animation-delay: 1.5s;
+  }
 
-    .slide-in-left {
-        animation: slideInLeft 0.8s ease-out;
-    }
+  @keyframes floating {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
 
-    .slide-in-right {
-        animation: slideInRight 0.8s ease-out;
-    }
+  .slide-in-left {
+    animation: slideInLeft 0.8s ease-out;
+  }
 
-    @keyframes slideInLeft {
-        from { transform: translateX(-100px); opacity: 0; }
-        to { transform: translateX(0); opacity: 1; }
-    }
+  .slide-in-right {
+    animation: slideInRight 0.8s ease-out;
+  }
 
-    @keyframes slideInRight {
-        from { transform: translateX(100px); opacity: 0; }
-        to { transform: translateX(0); opacity: 1; }
-    }
+  @keyframes slideInLeft {
+    from { transform: translateX(-100px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
 
-    .fade-in-up {
-        animation: fadeInUp 0.6s ease-out;
-    }
+  @keyframes slideInRight {
+    from { transform: translateX(100px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
 
-    @keyframes fadeInUp {
-        from { transform: translateY(30px); opacity: 0; }
-        to { transform: translateY(0); opacity: 1; }
-    }
+  .fade-in-up {
+    animation: fadeInUp 0.6s ease-out;
+  }
 
-    .pulse-glow {
-        animation: pulseGlow 2s ease-in-out infinite;
-    }
+  @keyframes fadeInUp {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
 
-    @keyframes pulseGlow {
-        0%, 100% { box-shadow: 0 0 20px rgba(102, 126, 234, 0.4); }
-        50% { box-shadow: 0 0 40px rgba(102, 126, 234, 0.8); }
-    }
+  .stats-counter {
+    animation: countUp 2s ease-out;
+  }
 
-    .job-card {
-        transition: all 0.3s ease;
-    }
+  @keyframes countUp {
+    from { opacity: 0; transform: scale(0.5); }
+    to { opacity: 1; transform: scale(1); }
+  }
 
-    .job-card:hover {
-        transform: translateY(-10px) scale(1.02);
-        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-    }
+  .blob {
+    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+    animation: morphing 8s ease-in-out infinite;
+  }
 
-    .category-card {
-        transition: all 0.3s ease;
-    }
+  @keyframes morphing {
+    0%, 100% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
+    25% { border-radius: 58% 42% 75% 25% / 76% 46% 54% 24%; }
+    50% { border-radius: 50% 50% 33% 67% / 55% 27% 73% 45%; }
+    75% { border-radius: 33% 67% 58% 42% / 63% 68% 32% 37%; }
+  }
 
-    .category-card:hover {
-        transform: scale(1.05);
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-    }
+  .job-card,
+  .category-card,
+  .testimonial-card {
+    transition: all 0.3s ease;
+  }
 
-    .stats-counter {
-        animation: countUp 2s ease-out;
-    }
+  .job-card:hover,
+  .testimonial-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+  }
 
-    @keyframes countUp {
-        from { opacity: 0; transform: scale(0.5); }
-        to { opacity: 1; transform: scale(1); }
-    }
+  .category-card:hover {
+    transform: translateY(-6px) scale(1.02);
+  }
 
-    .blob {
-        border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-        animation: morphing 8s ease-in-out infinite;
-    }
-
-    @keyframes morphing {
-        0%, 100% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
-        25% { border-radius: 58% 42% 75% 25% / 76% 46% 54% 24%; }
-        50% { border-radius: 50% 50% 33% 67% / 55% 27% 73% 45%; }
-        75% { border-radius: 33% 67% 58% 42% / 63% 68% 32% 37%; }
-    }
+  .hero-title {
+    line-height: 1.15;
+  }
 </style>
 
 <!-- Hero Section -->
-<section class="gradient-bg min-h-screen flex items-center relative overflow-hidden">
-    <!-- Animated Background Elements -->
-    <div class="absolute inset-0">
-        <div class="blob absolute top-20 left-10 w-72 h-72 bg-purple-300 opacity-20 floating"></div>
-        <div class="blob absolute bottom-20 right-10 w-96 h-96 bg-blue-300 opacity-20 floating-delayed"></div>
-        <div class="absolute top-1/2 left-1/4 w-4 h-4 bg-white rounded-full opacity-70 floating"></div>
-        <div class="absolute top-1/3 right-1/3 w-2 h-2 bg-white rounded-full opacity-50 floating-delayed"></div>
-        <div class="absolute bottom-1/3 left-1/2 w-3 h-3 bg-white rounded-full opacity-60 floating"></div>
-    </div>
-    
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div class="grid lg:grid-cols-2 gap-12 items-center">
-            <div class="text-white slide-in-left">
-                <h1 class="text-5xl lg:text-7xl font-bold mb-6 leading-tight">
-                    Start Your
-                    <span class="bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
-                        Career Journey
-                    </span>
-                    Now
-                </h1>
-                <p class="text-xl mb-8 text-purple-100">
-                    Your skills deserve the right opportunities—discover them with leading companies today.
-                </p>
-                
-                <!-- Search Bar -->
-                <form method="GET" action="{% url 'job_list' %}" class="bg-white p-2 rounded-2xl shadow-2xl mb-8">
-                    <div class="flex flex-col md:flex-row gap-2">
-                        <div class="flex-1 relative">
-                            <input type="text" name="query" placeholder="Job title or keyword"
-                                   class="w-full pl-12 pr-4 py-4 rounded-xl border-none focus:outline-none text-gray-700">
-                        </div>
-                        <div class="flex-1 relative">
-                            <input type="text" name="location" placeholder="Location"
-                                   class="w-full pl-12 pr-4 py-4 rounded-xl border-none focus:outline-none text-gray-700">
-                        </div>
-                        <button type="submit" class="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-8 py-4 rounded-xl font-semibold hover:from-purple-700 hover:to-blue-700 transition-all duration-300 transform hover:scale-105">
-                            Search Jobs
-                        </button>
-                    </div>
-                </form>
+<section class="gradient-bg min-h-screen flex items-center relative overflow-hidden pt-10 sm:pt-0">
+  <div class="absolute inset-0">
+    <div class="blob absolute top-20 left-4 sm:left-10 w-40 h-40 sm:w-72 sm:h-72 bg-purple-300 opacity-20 floating"></div>
+    <div class="blob absolute bottom-20 right-4 sm:right-10 w-56 h-56 sm:w-96 sm:h-96 bg-blue-300 opacity-20 floating-delayed"></div>
+    <div class="absolute top-1/2 left-1/4 w-4 h-4 bg-white rounded-full opacity-70 floating"></div>
+    <div class="absolute top-1/3 right-1/3 w-2 h-2 bg-white rounded-full opacity-50 floating-delayed"></div>
+    <div class="absolute bottom-1/3 left-1/2 w-3 h-3 bg-white rounded-full opacity-60 floating"></div>
+  </div>
 
-                <div class="flex items-center space-x-6 text-purple-100">
-                    <div class="flex items-center">
-                        <span class="text-2xl font-bold text-yellow-400 stats-counter">100+</span>
-                        <span class="ml-2">Active Jobs</span>
-                    </div>
-                    <div class="flex items-center">
-                        <span class="text-2xl font-bold text-yellow-400 stats-counter">25+</span>
-                        <span class="ml-2">Companies</span>
-                    </div>
-                    <div class="flex items-center">
-                        <span class="text-2xl font-bold text-yellow-400 stats-counter">500+</span>
-                        <span class="ml-2">Job Seekers</span>
-                    </div>
-                </div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12 items-center">
+      <div class="text-white slide-in-left text-center lg:text-left">
+        <h1 class="hero-title text-4xl sm:text-5xl lg:text-7xl font-bold mb-6">
+          Start Your
+          <span class="bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
+            Career Journey
+          </span>
+          Now
+        </h1>
+
+        <p class="text-base sm:text-lg lg:text-xl mb-8 text-purple-100 max-w-2xl mx-auto lg:mx-0">
+          Your skills deserve the right opportunities—discover the best jobs,
+          connect with top companies, and take the next step in your career.
+        </p>
+
+        <form method="GET" action="{% url 'job_list' %}" class="bg-white p-3 rounded-2xl shadow-2xl mb-8">
+          <div class="flex flex-col lg:flex-row gap-3">
+            <div class="flex-1">
+              <input
+                type="text"
+                name="q"
+                placeholder="Job title or keyword"
+                class="w-full px-4 py-3 sm:py-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500 text-gray-700"
+              >
             </div>
-            
-            <div class="slide-in-right">
-                <div class="relative">
-                    <div class="bg-white p-8 rounded-3xl shadow-2xl floating">
-                        <div class="flex items-center mb-4">
-                            <div class="w-12 h-12 bg-gradient-to-r from-green-400 to-blue-500 rounded-full flex items-center justify-center">
-                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                            </div>
-                            <div class="ml-4">
-                                <h3 class="font-semibold text-gray-800">Application Sent!</h3>
-                                <p class="text-gray-600 text-sm">Senior Developer at TechCorp</p>
-                            </div>
-                        </div>
-                        <div class="bg-gray-100 p-4 rounded-xl">
-                            <div class="flex justify-between items-center mb-2">
-                                <span class="text-sm text-gray-600">Match Score</span>
-                                <span class="text-sm font-semibold text-green-600">95%</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2">
-                                <div class="bg-gradient-to-r from-green-400 to-blue-500 h-2 rounded-full" style="width: 95%"></div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="absolute -bottom-6 -right-6 bg-white p-6 rounded-2xl shadow-xl floating-delayed">
-                        <div class="flex items-center">
-                            <div class="w-8 h-8 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full flex items-center justify-center">
-                                <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                            </div>
-                            <div class="ml-3">
-                                <p class="text-sm font-semibold text-gray-800">Interview Scheduled</p>
-                                <p class="text-xs text-gray-600">Tomorrow 10 AM</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
+            <div class="flex-1">
+              <input
+                type="text"
+                name="location"
+                placeholder="Location"
+                class="w-full px-4 py-3 sm:py-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500 text-gray-700"
+              >
             </div>
+
+            <button
+              type="submit"
+              class="w-full lg:w-auto bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold hover:from-purple-700 hover:to-blue-700 transition-all duration-300 transform hover:scale-105"
+            >
+              Search Jobs
+            </button>
+          </div>
+        </form>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 text-purple-100">
+          <div class="glass-effect rounded-2xl p-4 text-center">
+            <span class="block text-2xl sm:text-3xl font-bold text-yellow-400 stats-counter">100+</span>
+            <span class="text-sm sm:text-base">Active Jobs</span>
+          </div>
+          <div class="glass-effect rounded-2xl p-4 text-center">
+            <span class="block text-2xl sm:text-3xl font-bold text-yellow-400 stats-counter">25+</span>
+            <span class="text-sm sm:text-base">Companies</span>
+          </div>
+          <div class="glass-effect rounded-2xl p-4 text-center">
+            <span class="block text-2xl sm:text-3xl font-bold text-yellow-400 stats-counter">500+</span>
+            <span class="text-sm sm:text-base">Job Seekers</span>
+          </div>
         </div>
+      </div>
+
+      <div class="slide-in-right">
+        <div class="relative max-w-xl mx-auto">
+          <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-2xl floating">
+            <div class="flex items-center mb-4">
+              <div class="w-12 h-12 bg-gradient-to-r from-green-400 to-blue-500 rounded-full flex items-center justify-center">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+              </div>
+              <div class="ml-4">
+                <h3 class="font-semibold text-gray-800 text-base sm:text-lg">Application Sent!</h3>
+                <p class="text-gray-600 text-sm">Senior Developer at TechCorp</p>
+              </div>
+            </div>
+
+            <div class="bg-gray-100 p-4 rounded-xl">
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-sm text-gray-600">Match Score</span>
+                <span class="text-sm font-semibold text-green-600">95%</span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2">
+                <div class="bg-gradient-to-r from-green-400 to-blue-500 h-2 rounded-full" style="width: 95%"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="relative sm:absolute sm:-bottom-6 sm:-right-6 mt-6 sm:mt-0 bg-white p-5 sm:p-6 rounded-2xl shadow-xl floating-delayed">
+            <div class="flex items-center">
+              <div class="w-8 h-8 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full flex items-center justify-center">
+                <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+              </div>
+              <div class="ml-3">
+                <p class="text-sm font-semibold text-gray-800">Interview Scheduled</p>
+                <p class="text-xs text-gray-600">Tomorrow 10 AM</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
+  </div>
 </section>
 
 <!-- Job Categories -->
-<section class="py-20 bg-gray-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16 fade-in-up">
-            <h2 class="text-4xl font-bold text-gray-800 mb-4">Explore Job Categories</h2>
-            <p class="text-xl text-gray-600">Find opportunities in your field of expertise</p>
-        </div>
-        
-        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <!-- Category cards (Technology, Marketing, Finance, Healthcare) remain exactly as in your original code -->
-            {% comment %} Keep all category-card divs from your original code {% endcomment %}
-        </div>
+<section class="py-16 sm:py-20 bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12 sm:mb-16 fade-in-up">
+      <h2 class="text-3xl sm:text-4xl font-bold text-gray-800 mb-4">Explore Job Categories</h2>
+      <p class="text-lg sm:text-xl text-gray-600">Find opportunities in your field of expertise</p>
     </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="category-card bg-white rounded-2xl shadow-md p-6 text-center hover:bg-gradient-to-r hover:from-purple-600 hover:to-blue-600 hover:text-white">
+        <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-purple-100 flex items-center justify-center">
+          <span class="text-2xl">💻</span>
+        </div>
+        <h3 class="text-xl font-semibold mb-2">Technology</h3>
+        <p class="text-sm opacity-80">Developer, Designer, Data, AI, and IT roles</p>
+      </div>
+
+      <div class="category-card bg-white rounded-2xl shadow-md p-6 text-center hover:bg-gradient-to-r hover:from-purple-600 hover:to-blue-600 hover:text-white">
+        <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-pink-100 flex items-center justify-center">
+          <span class="text-2xl">📢</span>
+        </div>
+        <h3 class="text-xl font-semibold mb-2">Marketing</h3>
+        <p class="text-sm opacity-80">SEO, content, digital ads, and brand growth</p>
+      </div>
+
+      <div class="category-card bg-white rounded-2xl shadow-md p-6 text-center hover:bg-gradient-to-r hover:from-purple-600 hover:to-blue-600 hover:text-white">
+        <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-green-100 flex items-center justify-center">
+          <span class="text-2xl">💼</span>
+        </div>
+        <h3 class="text-xl font-semibold mb-2">Finance</h3>
+        <p class="text-sm opacity-80">Accounting, banking, audit, and analyst jobs</p>
+      </div>
+
+      <div class="category-card bg-white rounded-2xl shadow-md p-6 text-center hover:bg-gradient-to-r hover:from-purple-600 hover:to-blue-600 hover:text-white">
+        <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-blue-100 flex items-center justify-center">
+          <span class="text-2xl">🏥</span>
+        </div>
+        <h3 class="text-xl font-semibold mb-2">Healthcare</h3>
+        <p class="text-sm opacity-80">Medical, nursing, support, and admin roles</p>
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- Featured Jobs -->
-<section class="my-16 px-4 md:px-8">
-    <h2 class="text-3xl font-bold text-center mb-12">Featured Jobs</h2>
+<section class="py-16 sm:py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl sm:text-4xl font-bold text-gray-800 mb-4">Featured Jobs</h2>
+      <p class="text-lg text-gray-600">Handpicked opportunities for ambitious professionals</p>
+    </div>
 
     {% if featured_jobs %}
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
         {% for job in featured_jobs %}
-        <div class="bg-gradient-to-r from-indigo-600 to-blue-500 p-6 rounded-2xl shadow-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300">
+          <div class="job-card bg-gradient-to-r from-indigo-600 to-blue-500 p-6 rounded-2xl shadow-lg text-white">
             <div class="flex flex-col justify-between h-full">
-                <div>
-                    <h3 class="text-xl font-semibold text-white mb-2">{{ job.title }}</h3>
-                    <p class="text-gray-200 mb-1"><strong>Company:</strong> {{ job.company_name }}</p>
-                    <p class="text-gray-200 mb-1"><strong>Location:</strong> {{ job.location }}</p>
-                    {% if job.salary %}
-                    <p class="text-gray-200 mb-2"><strong>Salary:</strong> {{ job.salary }}</p>
-                    {% endif %}
-                </div>
-                <a href="{% url 'job_detail' job.id %}" 
-                   class="mt-4 inline-block bg-white text-blue-600 font-semibold px-4 py-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors duration-300 text-center">
-                   View Job
-                </a>
+              <div>
+                <h3 class="text-xl font-semibold mb-3">{{ job.title }}</h3>
+                <p class="mb-2"><strong>Company:</strong> {{ job.company_name }}</p>
+                <p class="mb-2"><strong>Location:</strong> {{ job.location }}</p>
+                {% if job.salary %}
+                  <p class="mb-2"><strong>Salary:</strong> {{ job.salary }}</p>
+                {% endif %}
+                {% if job.job_type %}
+                  <p class="mb-2"><strong>Type:</strong> {{ job.job_type }}</p>
+                {% endif %}
+              </div>
+
+              <a
+                href="{% url 'job_detail' job.id %}"
+                class="mt-6 inline-block bg-white text-blue-600 font-semibold px-4 py-3 rounded-lg hover:bg-blue-700 hover:text-white transition-colors duration-300 text-center"
+              >
+                View Job
+              </a>
             </div>
-        </div>
+          </div>
         {% endfor %}
-    </div>
+      </div>
     {% else %}
-    <p class="text-center text-gray-500">No featured jobs available right now.</p>
+      <p class="text-center text-gray-500">No featured jobs available right now.</p>
     {% endif %}
+  </div>
+</section>
+
+<!-- Why Choose Us -->
+<section class="py-16 sm:py-20 bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12 sm:mb-16">
+      <h2 class="text-3xl sm:text-4xl font-bold text-gray-800 mb-4">Why Choose JobFlow</h2>
+      <p class="text-lg sm:text-xl text-gray-600">Everything you need to find the right career opportunity</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="bg-white rounded-2xl shadow-md p-6 text-center">
+        <div class="text-4xl mb-4">⚡</div>
+        <h3 class="text-xl font-semibold text-gray-800 mb-3">Fast Search</h3>
+        <p class="text-gray-600">Find relevant jobs quickly with a smooth and easy search experience.</p>
+      </div>
+
+      <div class="bg-white rounded-2xl shadow-md p-6 text-center">
+        <div class="text-4xl mb-4">🎯</div>
+        <h3 class="text-xl font-semibold text-gray-800 mb-3">Relevant Jobs</h3>
+        <p class="text-gray-600">Discover curated opportunities from trusted employers and growing companies.</p>
+      </div>
+
+      <div class="bg-white rounded-2xl shadow-md p-6 text-center">
+        <div class="text-4xl mb-4">🔒</div>
+        <h3 class="text-xl font-semibold text-gray-800 mb-3">Easy Apply</h3>
+        <p class="text-gray-600">Apply to jobs using a simple and candidate-friendly application process.</p>
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- Testimonials -->
-<section class="py-20 bg-gray-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16 fade-in-up">
-            <h2 class="text-4xl font-bold text-gray-800 mb-4">What Our Users Say</h2>
-            <p class="text-xl text-gray-600">Real stories from real professionals</p>
-        </div>
-        
-        <div class="grid md:grid-cols-3 gap-8">
-            {% comment %} Keep all testimonial cards as in your original code {% endcomment %}
-        </div>
+<section class="py-16 sm:py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12 sm:mb-16 fade-in-up">
+      <h2 class="text-3xl sm:text-4xl font-bold text-gray-800 mb-4">What Our Users Say</h2>
+      <p class="text-lg sm:text-xl text-gray-600">Real stories from real professionals</p>
     </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+      <div class="testimonial-card bg-gray-50 rounded-2xl shadow-md p-6">
+        <div class="flex items-center mb-4">
+          <img src="https://ui-avatars.com/api/?name=Riya+Sharma" class="w-12 h-12 rounded-full mr-4" alt="Riya Sharma">
+          <div>
+            <h3 class="font-semibold text-gray-800">Riya Sharma</h3>
+            <p class="text-sm text-gray-500">Frontend Developer</p>
+          </div>
+        </div>
+        <p class="text-gray-600">
+          “This platform made my job search simple and fast. I found a role that matched my skills within days.”
+        </p>
+      </div>
+
+      <div class="testimonial-card bg-gray-50 rounded-2xl shadow-md p-6">
+        <div class="flex items-center mb-4">
+          <img src="https://ui-avatars.com/api/?name=Arjun+Thapa" class="w-12 h-12 rounded-full mr-4" alt="Arjun Thapa">
+          <div>
+            <h3 class="font-semibold text-gray-800">Arjun Thapa</h3>
+            <p class="text-sm text-gray-500">Digital Marketer</p>
+          </div>
+        </div>
+        <p class="text-gray-600">
+          “The job listings were clean, relevant, and easy to apply for. The whole experience felt professional.”
+        </p>
+      </div>
+
+      <div class="testimonial-card bg-gray-50 rounded-2xl shadow-md p-6">
+        <div class="flex items-center mb-4">
+          <img src="https://ui-avatars.com/api/?name=Sneha+Karki" class="w-12 h-12 rounded-full mr-4" alt="Sneha Karki">
+          <div>
+            <h3 class="font-semibold text-gray-800">Sneha Karki</h3>
+            <p class="text-sm text-gray-500">Finance Analyst</p>
+          </div>
+        </div>
+        <p class="text-gray-600">
+          “I loved the modern design and mobile-friendly layout. I could browse jobs comfortably from my phone.”
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Call To Action -->
+<section class="py-16 sm:py-20 bg-gradient-to-r from-purple-700 to-blue-700 text-white">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h2 class="text-3xl sm:text-4xl font-bold mb-4">Ready to Find Your Dream Job?</h2>
+    <p class="text-lg sm:text-xl text-purple-100 mb-8">
+      Explore opportunities, build your future, and connect with the right employers today.
+    </p>
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+      <a
+        href="{% url 'job_list' %}"
+        class="w-full sm:w-auto bg-white text-blue-700 font-semibold px-8 py-3 rounded-xl hover:bg-gray-100 transition"
+      >
+        Browse Jobs
+      </a>
+      {% if not user.is_authenticated %}
+      <a
+        href="{% url 'register' %}"
+        class="w-full sm:w-auto border border-white text-white font-semibold px-8 py-3 rounded-xl hover:bg-white hover:text-blue-700 transition"
+      >
+        Create Account
+      </a>
+      {% endif %}
+    </div>
+  </div>
 </section>
 
 {% endblock %}

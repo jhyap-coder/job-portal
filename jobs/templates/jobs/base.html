@@ -1,193 +1,352 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}Job Portal{% endblock %}</title>
 
     <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Alpine x-cloak fix -->
     <style>
-        [x-cloak] { display: none !important; }
+      [x-cloak] {
+        display: none !important;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        min-height: 100vh;
+      }
+
+      .footer-gradient {
+        background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0f172a 100%);
+      }
+
+      .nav-glass {
+        background: rgba(15, 23, 42, 0.9);
+        backdrop-filter: blur(14px);
+      }
+
+      .footer-link {
+        transition: all 0.3s ease;
+      }
+
+      .footer-link:hover {
+        transform: translateX(4px);
+      }
+
+      .social-icon {
+        transition: all 0.3s ease;
+      }
+
+      .social-icon:hover {
+        transform: translateY(-4px) scale(1.05);
+      }
     </style>
 
-    <!-- Tailwind Custom Config -->
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    animation: {
-                        float: 'float 3s ease-in-out infinite',
-                        'pulse-glow': 'pulseGlow 2s ease-in-out infinite',
-                        'slide-down': 'slideDown 0.3s ease-out',
-                    },
-                    keyframes: {
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-10px)' }
-                        },
-                        pulseGlow: {
-                            '0%, 100%': { opacity: 0.6 },
-                            '50%': { opacity: 1 }
-                        },
-                        slideDown: {
-                            '0%': { transform: 'translateY(-10%)', opacity: 0 },
-                            '100%': { transform: 'translateY(0)', opacity: 1 }
-                        }
-                    }
-                }
-            }
-        }
+      tailwind.config = {
+        theme: {
+          extend: {
+            animation: {
+              float: "float 3s ease-in-out infinite",
+              "pulse-glow": "pulseGlow 2s ease-in-out infinite",
+              "slide-down": "slideDown 0.3s ease-out",
+            },
+            keyframes: {
+              float: {
+                "0%, 100%": { transform: "translateY(0)" },
+                "50%": { transform: "translateY(-10px)" },
+              },
+              pulseGlow: {
+                "0%, 100%": { opacity: 0.6 },
+                "50%": { opacity: 1 },
+              },
+              slideDown: {
+                "0%": { transform: "translateY(-10%)", opacity: 0 },
+                "100%": { transform: "translateY(0)", opacity: 1 },
+              },
+            },
+          },
+        },
+      };
     </script>
-</head>
+  </head>
 
-<body class="p-4 sm:p-8 bg-gray-100">
-
-<!-- NAVBAR START -->
-<nav x-data="{ isOpen: false }" class="fixed top-0 left-0 w-full z-50 border border-blue-500/20">
-    <div class="absolute inset-0 bg-gradient-to-r from-blue-950 via-blue-900 to-blue-950 backdrop-blur-md"></div>
-
-    <div class="relative px-4 sm:px-8 py-4">
-        <div class="flex items-center justify-between">
-
-            <!-- Logo -->
-            <a href="{% url 'home' %}" class="text-xl sm:text-2xl font-bold text-white">
-                JobPortal
-            </a>
-
-            <!-- Desktop Menu -->
-            <div class="hidden md:flex space-x-8">
-                <a href="{% url 'home' %}" class="text-blue-100 hover:text-white">Home</a>
-                <a href="{% url 'job_list' %}" class="text-blue-100 hover:text-white">Jobs</a>
-                <a href="{% url 'contact' %}" class="text-blue-100 hover:text-white">Contact</a>
+  <body class="bg-gray-100 text-gray-800">
+    <!-- NAVBAR START -->
+    <nav
+      x-data="{ isOpen: false, profileOpen: false }"
+      class="fixed top-0 left-0 w-full z-50 border-b border-blue-400/20 nav-glass shadow-lg"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between py-4">
+          <!-- Logo -->
+          <a href="{% url 'home' %}" class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold shadow-lg">
+              J
             </div>
+            <div>
+              <h1 class="text-lg sm:text-xl font-bold text-white leading-tight">JobPortal</h1>
+              <p class="text-xs text-blue-200 hidden sm:block">Find your dream opportunity</p>
+            </div>
+          </a>
 
-            <!-- Right Buttons / Profile -->
-            <div class="flex items-center space-x-4">
-                {% if user.is_authenticated %}
-                    <!-- Profile Dropdown -->
-                    <div class="relative" x-data="{ open: false }">
-                        <button @click="open = !open" class="flex items-center space-x-2 focus:outline-none">
-                            <img
-                                src="{% if profile and profile.photo %}
-                                        {{ profile.photo.url }}
-                                     {% else %}
-                                        https://ui-avatars.com/api/?name={{ user.get_full_name|default:user.username }}
-                                     {% endif %}"
-                                class="w-8 h-8 rounded-full object-cover border"
-                            />
-                            <span class="text-white">{{ user.first_name }}</span>
-                        </button>
+          <!-- Desktop Menu -->
+          <div class="hidden md:flex items-center space-x-8">
+            <a href="{% url 'home' %}" class="text-blue-100 hover:text-white font-medium transition">Home</a>
+            <a href="{% url 'job_list' %}" class="text-blue-100 hover:text-white font-medium transition">Jobs</a>
+            <a href="{% url 'contact' %}" class="text-blue-100 hover:text-white font-medium transition">Contact</a>
+          </div>
 
-                        <!-- Dropdown Menu -->
-                        <div x-show="open" x-cloak @click.away="open = false"
-                             x-transition
-                             class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg z-50">
+          <!-- Right Side -->
+          <div class="flex items-center gap-3 sm:gap-4">
+            {% if user.is_authenticated %}
+            <!-- Profile Dropdown -->
+            <div class="relative">
+              <button
+                @click="profileOpen = !profileOpen"
+                class="flex items-center gap-2 sm:gap-3 focus:outline-none bg-white/10 hover:bg-white/20 px-2 sm:px-3 py-2 rounded-full transition"
+              >
+                <img
+                  src="{% if profile and profile.photo %}{{ profile.photo.url }}{% else %}https://ui-avatars.com/api/?name={{ user.get_full_name|default:user.username }}{% endif %}"
+                  class="w-9 h-9 rounded-full object-cover border-2 border-white/60"
+                  alt="Profile"
+                />
+                <span class="hidden sm:inline text-white font-medium max-w-[120px] truncate">
+                  {{ user.first_name|default:user.username }}
+                </span>
+                <svg class="w-4 h-4 text-white hidden sm:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </button>
 
-                            {% if user.is_staff %}
-                                <a href="{% url 'admin_dashboard' %}"
-                                   class="block px-4 py-2 text-gray-800 hover:bg-gray-100">
-                                    Admin Dashboard
-                                </a>
-                            {% else %}
-                                <a href="{% url 'profile' %}"
-                                   class="block px-4 py-2 text-gray-800 hover:bg-gray-100">
-                                    Profile
-                                </a>
-                                <a href="{% url 'edit_profile' %}"
-                                   class="block px-4 py-2 text-gray-800 hover:bg-gray-100">
-                                    Edit Profile
-                                </a>
-                            {% endif %}
+              <div
+                x-show="profileOpen"
+                x-cloak
+                @click.away="profileOpen = false"
+                x-transition
+                class="absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden"
+              >
+                <div class="px-4 py-3 border-b bg-gray-50">
+                  <p class="font-semibold text-gray-800 truncate">{{ user.get_full_name|default:user.username }}</p>
+                  <p class="text-sm text-gray-500 truncate">{{ user.email }}</p>
+                </div>
 
-                            <a href="{% url 'logout' %}"
-                               class="block px-4 py-2 text-red-600 hover:bg-red-100">
-                                Logout
-                            </a>
-                        </div>
-                    </div>
+                {% if user.is_staff %}
+                <a
+                  href="{% url 'admin_dashboard' %}"
+                  class="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition"
+                >
+                  Admin Dashboard
+                </a>
                 {% else %}
-                    <a href="{% url 'login' %}" class="px-4 py-2 rounded-lg bg-blue-600 text-white">Login</a>
-                    <a href="{% url 'register' %}" class="px-4 py-2 rounded-lg bg-blue-600 text-white">Register</a>
+                <a
+                  href="{% url 'profile' %}"
+                  class="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition"
+                >
+                  Profile
+                </a>
+                <a
+                  href="{% url 'edit_profile' %}"
+                  class="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition"
+                >
+                  Edit Profile
+                </a>
+                <a
+                  href="{% url 'my_jobs' %}"
+                  class="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition"
+                >
+                  My Applications
+                </a>
                 {% endif %}
 
-                <!-- Mobile Toggle -->
-                <button @click="isOpen = !isOpen" class="md:hidden text-white text-xl">
-                    ☰
-                </button>
+                <a
+                  href="{% url 'logout' %}"
+                  class="block px-4 py-3 text-red-600 hover:bg-red-50 transition"
+                >
+                  Logout
+                </a>
+              </div>
             </div>
+            {% else %}
+            <div class="hidden sm:flex items-center gap-3">
+              <a
+                href="{% url 'login' %}"
+                class="px-4 py-2 rounded-lg border border-blue-300 text-white hover:bg-white hover:text-blue-800 transition font-medium"
+              >
+                Login
+              </a>
+              <a
+                href="{% url 'register' %}"
+                class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition font-medium shadow-lg"
+              >
+                Register
+              </a>
+            </div>
+            {% endif %}
+
+            <!-- Mobile Toggle -->
+            <button
+              @click="isOpen = !isOpen"
+              class="md:hidden text-white p-2 rounded-lg hover:bg-white/10 transition"
+              aria-label="Toggle menu"
+            >
+              <svg x-show="!isOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+              </svg>
+              <svg x-show="isOpen" x-cloak class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
         </div>
 
         <!-- Mobile Menu -->
-        <div x-show="isOpen" x-cloak class="md:hidden mt-4 space-y-2">
-            <a href="{% url 'home' %}" class="block text-blue-100">Home</a>
-            <a href="{% url 'job_list' %}" class="block text-blue-100">Jobs</a>
-            <a href="{% url 'contact' %}" class="block text-blue-100">Contact</a>
+        <div
+          x-show="isOpen"
+          x-cloak
+          x-transition
+          class="md:hidden pb-4 space-y-2"
+        >
+          <div class="bg-white/10 rounded-2xl p-4 space-y-2">
+            <a href="{% url 'home' %}" class="block text-blue-100 hover:text-white hover:bg-white/10 px-3 py-2 rounded-lg transition">Home</a>
+            <a href="{% url 'job_list' %}" class="block text-blue-100 hover:text-white hover:bg-white/10 px-3 py-2 rounded-lg transition">Jobs</a>
+            <a href="{% url 'contact' %}" class="block text-blue-100 hover:text-white hover:bg-white/10 px-3 py-2 rounded-lg transition">Contact</a>
+
+            {% if user.is_authenticated %}
+              {% if not user.is_staff %}
+              <a href="{% url 'profile' %}" class="block text-blue-100 hover:text-white hover:bg-white/10 px-3 py-2 rounded-lg transition">Profile</a>
+              <a href="{% url 'edit_profile' %}" class="block text-blue-100 hover:text-white hover:bg-white/10 px-3 py-2 rounded-lg transition">Edit Profile</a>
+              <a href="{% url 'my_jobs' %}" class="block text-blue-100 hover:text-white hover:bg-white/10 px-3 py-2 rounded-lg transition">My Applications</a>
+              {% else %}
+              <a href="{% url 'admin_dashboard' %}" class="block text-blue-100 hover:text-white hover:bg-white/10 px-3 py-2 rounded-lg transition">Admin Dashboard</a>
+              {% endif %}
+              <a href="{% url 'logout' %}" class="block text-red-300 hover:text-white hover:bg-red-500/20 px-3 py-2 rounded-lg transition">Logout</a>
+            {% else %}
+              <div class="pt-3 flex flex-col gap-3">
+                <a href="{% url 'login' %}" class="w-full text-center px-4 py-2 rounded-lg border border-blue-300 text-white hover:bg-white hover:text-blue-800 transition font-medium">
+                  Login
+                </a>
+                <a href="{% url 'register' %}" class="w-full text-center px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition font-medium">
+                  Register
+                </a>
+              </div>
+            {% endif %}
+          </div>
         </div>
-    </div>
-</nav>
-<!-- NAVBAR END -->
+      </div>
+    </nav>
+    <!-- NAVBAR END -->
 
-<!-- PAGE CONTENT -->
-<div class="max-w-7xl mx-auto mt-32">
-    {% block content %}{% endblock %}
-</div>
+    <!-- PAGE CONTENT -->
+    <main class="max-w-7xl mx-auto mt-28 sm:mt-32 px-4 sm:px-6 lg:px-8 min-h-[60vh]">
+      {% block content %}{% endblock %}
+    </main>
 
-<br>
-<hr>
+    <!-- FOOTER START -->
+    <footer class="footer-gradient text-gray-300 mt-16 relative overflow-hidden">
+      <div class="absolute inset-0 opacity-10">
+        <div class="absolute top-10 left-10 w-40 h-40 bg-blue-400 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-10 right-10 w-52 h-52 bg-indigo-400 rounded-full blur-3xl"></div>
+      </div>
 
-<!-- Footer Section -->
-<footer class="bg-gray-800 text-gray-300 w-full mt-12 min-h-[400px]">
-    <!-- Main Footer Content -->
-    <div class="container mx-auto px-4 py-12 w-full">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+          <!-- Brand -->
+          <div class="sm:col-span-2 lg:col-span-1">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                J
+              </div>
+              <div>
+                <h2 class="text-2xl font-bold text-white">JobPortal</h2>
+                <p class="text-sm text-blue-200">Build your future with confidence</p>
+              </div>
+            </div>
+            <p class="text-gray-300 leading-relaxed mb-5">
+              We connect job seekers with meaningful opportunities and help employers find the right talent faster.
+            </p>
 
+            <div class="flex items-center gap-3">
+              <a href="#" class="social-icon w-10 h-10 rounded-full bg-white/10 hover:bg-blue-600 flex items-center justify-center">
+                <span class="text-sm">f</span>
+              </a>
+              <a href="#" class="social-icon w-10 h-10 rounded-full bg-white/10 hover:bg-sky-500 flex items-center justify-center">
+                <span class="text-sm">t</span>
+              </a>
+              <a href="#" class="social-icon w-10 h-10 rounded-full bg-white/10 hover:bg-pink-600 flex items-center justify-center">
+                <span class="text-sm">ig</span>
+              </a>
+              <a href="#" class="social-icon w-10 h-10 rounded-full bg-white/10 hover:bg-blue-700 flex items-center justify-center">
+                <span class="text-sm">in</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Quick Links -->
+          <div>
+            <h3 class="text-xl font-semibold text-white mb-5">Quick Links</h3>
+            <ul class="space-y-3">
+              <li><a href="{% url 'home' %}" class="footer-link text-gray-300 hover:text-white inline-block">Home</a></li>
+              <li><a href="{% url 'job_list' %}" class="footer-link text-gray-300 hover:text-white inline-block">Browse Jobs</a></li>
+              <li><a href="{% url 'contact' %}" class="footer-link text-gray-300 hover:text-white inline-block">Contact Us</a></li>
+              {% if user.is_authenticated and not user.is_staff %}
+              <li><a href="{% url 'profile' %}" class="footer-link text-gray-300 hover:text-white inline-block">My Profile</a></li>
+              {% endif %}
+            </ul>
+          </div>
+
+          <!-- Services -->
+          <div>
+            <h3 class="text-xl font-semibold text-white mb-5">Services</h3>
+            <ul class="space-y-3">
+              <li class="text-gray-300">Job Search</li>
+              <li class="text-gray-300">Online Application</li>
+              <li class="text-gray-300">Employer Listings</li>
+              <li class="text-gray-300">Career Growth</li>
+            </ul>
+          </div>
+
+          <!-- Contact -->
+          <div>
+            <h3 class="text-xl font-semibold text-white mb-5">Contact</h3>
             <div class="space-y-4">
-    <div class="flex items-center space-x-3">
-        <img src="https://plus.unsplash.com/premium_photo-1669075651475-5cba57c03b8c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8bG9nbyUyMGxldHRlciUyMGN8ZW58MHx8MHx8fDA%3D" alt="JobPortal Logo" class="rounded-full w-12 h-12 shadow-lg bg-white">
-        <h2 class="text-2xl font-bold text-white">Chitra</h2>
-    </div>
-
-    <p class="text-gray-400">
-        Helping you build the career you deserve.
-    </p>
-</div>
-
-            <div>
-                <h3 class="text-xl font-semibold text-white mb-6">Quick Links</h3>
-                <ul class="space-y-3">
-                    <li><a href="{% url 'home' %}" class="hover:text-white">Home</a></li>
-                    <li><a href="{% url 'job_list' %}" class="hover:text-white">Jobs</a></li>
-                    <li><a href="{% url 'contact' %}" class="hover:text-white">Contact</a></li>
-                </ul>
+              <div>
+                <p class="text-sm text-blue-200 mb-1">Email</p>
+                <p class="text-gray-300 break-all">geevanthapa750@gmail.com</p>
+              </div>
+              <div>
+                <p class="text-sm text-blue-200 mb-1">Phone</p>
+                <p class="text-gray-300">+977-9816502153</p>
+              </div>
+              <div>
+                <p class="text-sm text-blue-200 mb-1">Location</p>
+                <p class="text-gray-300">Kathmandu, Nepal</p>
+              </div>
             </div>
-
-            <!-- <div>
-                <h3 class="text-xl font-semibold text-white mb-6">Services</h3>
-                <ul class="space-y-3">
-                    <li>Web Development</li>
-                    <li>UI/UX Design</li>
-                    <li>SEO</li>
-                    <li>Marketing</li>
-                </ul>
-            </div> -->
-
-            <div>
-                <h3 class="text-xl font-semibold text-white mb-6">Contact</h3>
-                <p>Email: geevanthapa750@gmail.com</p>
-                <p>Phone: +977-9816502153</p>
-            </div>
+          </div>
         </div>
-    </div>
 
-    <div class="border-t border-gray-800 text-center py-6">
-        &copy; 2025 Chitra Bahadur Thapa Chhetri. All rights reserved.
-    </div>
-</footer>
+        <!-- Bottom Footer -->
+        <div class="border-t border-white/10 mt-12 pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-400">
+          <p class="text-center md:text-left">
+            &copy; 2025 Chitra Bahadur Thapa Chhetri. All rights reserved.
+          </p>
+          <div class="flex flex-wrap justify-center gap-4">
+            <a href="#" class="hover:text-white transition">Privacy Policy</a>
+            <a href="#" class="hover:text-white transition">Terms of Service</a>
+            <a href="#" class="hover:text-white transition">Support</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <!-- FOOTER END -->
 
-<!-- Alpine.js -->
-<script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-
-</body>
+    <!-- Alpine.js -->
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+  </body>
 </html>

@@ -1,143 +1,164 @@
-{% extends "jobs/base.html" %} {% load static %} {% block title %}Job Details{%
-endblock %} {% block content %}
+{% extends "jobs/base.html" %}
+{% load static %}
 
-<div class="max-w-5xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
-  <!-- Django Messages -->
+{% block title %}{{ job.title }} | Job Details{% endblock %}
 
-  <!-- Job Header -->
-  <div
-    class="bg-white shadow-lg rounded-lg p-8 mb-8 border-l-8 border-blue-600"
-  >
-    <h1 class="text-4xl font-extrabold mb-2 text-gray-800">{{ job.title }}</h1>
-    <div class="flex flex-wrap text-gray-600 gap-4">
+{% block content %}
+
+<div class="max-w-5xl mx-auto py-8 sm:py-12">
+
+  <!-- Job Card -->
+  <div class="bg-white shadow-xl rounded-2xl p-6 sm:p-8 border-l-4 border-blue-600">
+
+    <!-- Title -->
+    <h1 class="text-2xl sm:text-4xl font-bold text-gray-800 mb-4">
+      {{ job.title }}
+    </h1>
+
+    <!-- Meta Info -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-gray-600 mb-6">
       <p><strong>Company:</strong> {{ job.company_name }}</p>
       <p><strong>Location:</strong> {{ job.location }}</p>
+      {% if job.salary %}
       <p><strong>Salary:</strong> {{ job.salary }}</p>
+      {% endif %}
+      {% if job.job_type %}
       <p><strong>Type:</strong> {{ job.job_type }}</p>
+      {% endif %}
     </div>
-  </div>
 
-  <!-- Job Description -->
-  <div class="bg-white shadow-md rounded-lg p-6 mb-6">
-    <h2 class="text-2xl font-semibold mb-4 text-gray-800 border-b pb-2">
+    <hr class="my-6">
+
+    <!-- Description -->
+    <h2 class="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">
       Job Description
     </h2>
-    <p class="text-gray-700 leading-relaxed">
+
+    <div class="text-gray-700 leading-relaxed space-y-3">
       {{ job.description|linebreaks }}
-    </p>
+    </div>
+
   </div>
 
-  <!-- Apply Button -->
-  <div class="text-center mb-10">
+  <!-- Apply Section -->
+  <div class="mt-8 text-center">
+
     {% if user.is_authenticated %}
-    <button
-      id="applyBtn"
-      class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3 rounded-lg shadow-lg"
-    >
-      Apply Now
-    </button>
-    <!-- {% else %}
-            <p class="text-red-500 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">
-                <a href="{% url 'login' %}" class="underline">Please login to apply.</a>
-            </p>
-        {% endif %} -->
+
+      <button
+        id="applyBtn"
+        class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3 rounded-xl shadow-lg transition duration-300"
+      >
+        Apply Now
+      </button>
 
     {% else %}
-    <a
-      href="{% url 'login' %}"
-      class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700"
-    >
-      Please login to apply.
-    </a>
+
+      <a
+        href="{% url 'login' %}"
+        class="inline-block w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3 rounded-xl shadow-lg transition duration-300"
+      >
+        Please login to apply
+      </a>
+
     {% endif %}
+
   </div>
+
 </div>
+
+{% if user.is_authenticated %}
 
 <!-- Apply Modal -->
 <div
   id="applyModal"
-  class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50"
+  class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50 p-4"
 >
-  <div class="bg-white rounded-lg shadow-lg max-w-lg w-full p-6 relative">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6 relative">
+
+    <!-- Close Button -->
     <button
       id="closeModal"
-      class="absolute top-2 right-4 text-2xl text-gray-500 hover:text-black"
+      class="absolute top-3 right-4 text-2xl text-gray-500 hover:text-black"
     >
       &times;
     </button>
 
-    <h2 class="text-xl font-bold mb-4">Apply for {{ job.title }}</h2>
+    <h2 class="text-xl sm:text-2xl font-bold mb-6 text-gray-800">
+      Apply for {{ job.title }}
+    </h2>
 
-    <!-- Application Form -->
     <form
       method="POST"
       enctype="multipart/form-data"
       action="{% url 'apply_job' job.id %}"
+      class="space-y-4"
     >
       {% csrf_token %}
 
-      <div class="mb-3">
-        <label class="font-semibold">Full Name</label>
+      <div>
+        <label class="font-semibold block mb-1">Full Name</label>
         <input
           type="text"
           name="full_name"
           value="{{ user.get_full_name }}"
-          class="w-full border rounded px-3 py-2"
+          class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
           required
         />
       </div>
 
-      <div class="mb-3">
-        <label class="font-semibold">Email</label>
+      <div>
+        <label class="font-semibold block mb-1">Email</label>
         <input
           type="email"
           name="email"
           value="{{ user.email }}"
-          class="w-full border rounded px-3 py-2"
+          class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
           required
         />
       </div>
 
-      <div class="mb-3">
-        <label class="font-semibold">Phone</label>
+      <div>
+        <label class="font-semibold block mb-1">Phone</label>
         <input
           type="text"
           name="phone"
-          class="w-full border rounded px-3 py-2"
+          class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
           required
         />
       </div>
 
-      <div class="mb-3">
-        <label class="font-semibold">Resume (PDF)</label>
+      <div>
+        <label class="font-semibold block mb-1">Resume (PDF)</label>
         <input
           type="file"
           name="cv"
-          class="w-full border rounded px-3 py-2"
+          class="w-full border rounded-lg px-3 py-2"
           required
         />
       </div>
 
-      <div class="mb-4">
-        <label class="font-semibold">Photo</label>
+      <div>
+        <label class="font-semibold block mb-1">Photo (Optional)</label>
         <input
           type="file"
           name="photo"
-          class="w-full border rounded px-3 py-2"
+          class="w-full border rounded-lg px-3 py-2"
         />
       </div>
 
       <button
         type="submit"
-        class="bg-blue-600 hover:bg-blue-700 text-white w-full py-2 rounded font-semibold"
+        class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition"
       >
         Submit Application
       </button>
+
     </form>
+
   </div>
 </div>
 
-<!-- Modal Script -->
 <script>
   const applyBtn = document.getElementById("applyBtn");
   const applyModal = document.getElementById("applyModal");
@@ -149,9 +170,11 @@ endblock %} {% block content %}
     });
   }
 
-  closeModal.addEventListener("click", () => {
-    applyModal.classList.add("hidden");
-  });
+  if (closeModal) {
+    closeModal.addEventListener("click", () => {
+      applyModal.classList.add("hidden");
+    });
+  }
 
   window.addEventListener("click", (e) => {
     if (e.target === applyModal) {
@@ -160,10 +183,6 @@ endblock %} {% block content %}
   });
 </script>
 
-<style>
-  body {
-    background: linear-gradient(to right, #f3f4f6, #e5e7eb);
-  }
-</style>
+{% endif %}
 
 {% endblock %}
