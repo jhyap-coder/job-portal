@@ -20,7 +20,7 @@ from .models import Profile, Job, JobApplication, UserProfile, ContactMessage
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 import re
-
+from django.db import transaction
 # ==========================
 # HOME
 # ==========================
@@ -58,25 +58,25 @@ def register(request):
             return redirect('register')
 
         try:
-            # Create User instance safely
-            user = User.objects.create_user(
-                username=email,
-                email=email,
-                password=password,
-                first_name=first_name,
-                last_name=last_name
-            )
+            with transaction.atomic():
+                user = User.objects.create_user(
+                    username=email,
+                    email=email,
+                    password=password,
+                    first_name=first_name,
+                    last_name=last_name
+                )
 
-            # Create related UserProfile and Profile
-            UserProfile.objects.create(user=user, role='jobseeker')
-            Profile.objects.create(user=user)
+                user_profile, created = UserProfile.objects.get_or_create(user=user)
+                user_profile.role = 'jobseeker'
+                user_profile.save()
 
             messages.success(request, "Account created successfully.")
             return redirect('login')
 
         except Exception as e:
             import traceback
-            traceback.print_exc()  # Prints full error in console
+            traceback.print_exc()
             messages.error(request, f"Server error: {e}")
             return redirect('register')
 
