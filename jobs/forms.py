@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from .models import Profile, JobApplication, Job
-
+from .models import Testimonial
 
 
 class RegisterForm(UserCreationForm):
@@ -149,3 +149,20 @@ class CustomPasswordChangeForm(PasswordChangeForm):
             'class': 'w-full border rounded px-3 py-2'
         })
     )
+
+
+class TestimonialForm(forms.ModelForm):
+    class Meta:
+        model = Testimonial
+        fields = ['designation', 'message']
+        widgets = {
+            'designation': forms.TextInput(attrs={
+                'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500',
+                'placeholder': 'Your role, e.g. Frontend Developer'
+            }),
+            'message': forms.Textarea(attrs={
+                'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500',
+                'placeholder': 'Write your experience here...',
+                'rows': 5
+            }),
+        }

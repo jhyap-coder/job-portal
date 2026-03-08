@@ -346,44 +346,59 @@
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-      <div class="testimonial-card bg-gray-50 rounded-2xl shadow-md p-6">
-        <div class="flex items-center mb-4">
-          <img src="https://ui-avatars.com/api/?name=Riya+Sharma" class="w-12 h-12 rounded-full mr-4" alt="Riya Sharma">
-          <div>
-            <h3 class="font-semibold text-gray-800">Riya Sharma</h3>
-            <p class="text-sm text-gray-500">Frontend Developer</p>
-          </div>
-        </div>
-        <p class="text-gray-600">
-          “This platform made my job search simple and fast. I found a role that matched my skills within days.”
-        </p>
-      </div>
+      {% for testimonial in testimonials %}
+        <div class="testimonial-card bg-gray-50 rounded-2xl shadow-md p-6">
+          <div class="flex items-center mb-4">
+            {% if testimonial.profile_photo_url %}
+  <img
+    src="{{ testimonial.profile_photo_url }}"
+    alt="{{ testimonial.user.get_full_name|default:testimonial.user.username }}"
+    class="w-14 h-14 rounded-full object-cover object-center mr-4 border border-gray-200 shrink-0"
+    onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name={{ testimonial.user.get_full_name|default:testimonial.user.username|urlencode }}&background=4f46e5&color=fff';"
+  >
+{% else %}
+  <img
+    src="https://ui-avatars.com/api/?name={{ testimonial.user.get_full_name|default:testimonial.user.username|urlencode }}&background=4f46e5&color=fff"
+    alt="{{ testimonial.user.get_full_name|default:testimonial.user.username }}"
+    class="w-14 h-14 rounded-full object-cover object-center mr-4 border border-gray-200 shrink-0"
+  >
+{% endif %}
 
-      <div class="testimonial-card bg-gray-50 rounded-2xl shadow-md p-6">
-        <div class="flex items-center mb-4">
-          <img src="https://ui-avatars.com/api/?name=Arjun+Thapa" class="w-12 h-12 rounded-full mr-4" alt="Arjun Thapa">
-          <div>
-            <h3 class="font-semibold text-gray-800">Arjun Thapa</h3>
-            <p class="text-sm text-gray-500">Digital Marketer</p>
+            <div class="min-w-0">
+              <h3 class="font-semibold text-gray-800 truncate">
+                {{ testimonial.user.get_full_name|default:testimonial.user.username }}
+              </h3>
+              <p class="text-sm text-gray-500">{{ testimonial.designation }}</p>
+            </div>
           </div>
-        </div>
-        <p class="text-gray-600">
-          “The job listings were clean, relevant, and easy to apply for. The whole experience felt professional.”
-        </p>
-      </div>
 
-      <div class="testimonial-card bg-gray-50 rounded-2xl shadow-md p-6">
-        <div class="flex items-center mb-4">
-          <img src="https://ui-avatars.com/api/?name=Sneha+Karki" class="w-12 h-12 rounded-full mr-4" alt="Sneha Karki">
-          <div>
-            <h3 class="font-semibold text-gray-800">Sneha Karki</h3>
-            <p class="text-sm text-gray-500">Finance Analyst</p>
-          </div>
+          <p class="text-gray-600 break-words">
+            “{{ testimonial.message }}”
+          </p>
         </div>
-        <p class="text-gray-600">
-          “I loved the modern design and mobile-friendly layout. I could browse jobs comfortably from my phone.”
-        </p>
-      </div>
+      {% empty %}
+        <div class="col-span-full text-center text-gray-500">
+          No testimonials available yet.
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="text-center mt-10">
+      {% if user.is_authenticated %}
+        <a
+          href="{% url 'submit_testimonial' %}"
+          class="inline-block bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold px-6 py-3 rounded-xl hover:from-purple-700 hover:to-blue-700 transition"
+        >
+          Share Your Experience
+        </a>
+      {% else %}
+        <a
+          href="{% url 'login' %}"
+          class="inline-block bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold px-6 py-3 rounded-xl hover:from-purple-700 hover:to-blue-700 transition"
+        >
+          Login to Share Your Experience
+        </a>
+      {% endif %}
     </div>
   </div>
 </section>
@@ -403,12 +418,12 @@
         Browse Jobs
       </a>
       {% if not user.is_authenticated %}
-      <a
-        href="{% url 'register' %}"
-        class="w-full sm:w-auto border border-white text-white font-semibold px-8 py-3 rounded-xl hover:bg-white hover:text-blue-700 transition"
-      >
-        Create Account
-      </a>
+        <a
+          href="{% url 'register' %}"
+          class="w-full sm:w-auto border border-white text-white font-semibold px-8 py-3 rounded-xl hover:bg-white hover:text-blue-700 transition"
+        >
+          Create Account
+        </a>
       {% endif %}
     </div>
   </div>

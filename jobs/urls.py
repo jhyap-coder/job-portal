@@ -59,6 +59,16 @@ urlpatterns = [
     # Admin Users
     path('dashboard/admin/users/', views.admin_users, name='admin_users'),
     path('dashboard/admin/users/<int:id>/toggle/', views.toggle_user, name='toggle_user'),
+    path('dashboard/admin/testimonials/', views.admin_testimonials, name='admin_testimonials'),
+    path('dashboard/admin/testimonials/<int:id>/approve/', views.approve_testimonial, name='approve_testimonial'),
+    path('dashboard/admin/testimonials/<int:id>/unapprove/', views.unapprove_testimonial, name='unapprove_testimonial'),
+    path('dashboard/admin/testimonials/<int:id>/delete/', views.delete_testimonial, name='delete_testimonial'),
+
+    # Admin Testimonials
+path('dashboard/admin/testimonials/', views.admin_testimonials, name='admin_testimonials'),
+path('dashboard/admin/testimonials/<int:id>/approve/', views.approve_testimonial, name='approve_testimonial'),
+path('dashboard/admin/testimonials/<int:id>/unapprove/', views.unapprove_testimonial, name='unapprove_testimonial'),
+path('dashboard/admin/testimonials/<int:id>/delete/', views.delete_testimonial, name='delete_testimonial'),
 
     # Other URLs...
     path('password-change/', auth_views.PasswordChangeView.as_view(
@@ -69,6 +79,7 @@ urlpatterns = [
     path('password-change-done/', auth_views.PasswordChangeDoneView.as_view(
         template_name='jobs/password_change.html'
     ), name='password_change_done'),
+    path('submit-testimonial/', views.submit_testimonial, name='submit_testimonial'),
 
     
 ]

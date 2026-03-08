@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import Job, JobApplication, ContactMessage
+from .models import Testimonial
 
 
 
@@ -45,3 +46,10 @@ class ContactMessageAdmin(admin.ModelAdmin):
 
     def has_add_permission(self, request):
         return False
+
+
+@admin.register(Testimonial)
+class TestimonialAdmin(admin.ModelAdmin):
+    list_display = ('user', 'designation', 'is_approved', 'created_at')
+    list_filter = ('is_approved', 'created_at')
+    search_fields = ('user__username', 'user__first_name', 'user__last_name', 'designation', 'message')

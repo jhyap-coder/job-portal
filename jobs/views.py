@@ -21,12 +21,24 @@ from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 import re
 from django.db import transaction
+from .models import Testimonial
+from .forms import TestimonialForm
+
 # ==========================
 # HOME
 # ==========================
 def home(request):
     featured_jobs = Job.objects.filter(featured=True, is_active=True)
-    return render(request, 'jobs/home.html', {'featured_jobs': featured_jobs})
+    testimonials = Testimonial.objects.filter(is_approved=True).select_related('user').order_by('-created_at')[:6]
+
+    for testimonial in testimonials:
+        profile = Profile.objects.filter(user=testimonial.user).first()
+        testimonial.profile_photo_url = profile.photo.url if profile and profile.photo else None
+
+    return render(request, 'jobs/home.html', {
+        'featured_jobs': featured_jobs,
+        'testimonials': testimonials
+    })
 
 
 # ==========================
@@ -245,14 +257,16 @@ def admin_dashboard(request):
         form = ProfilePhotoForm(instance=profile)
 
     context = {
-        'profile': profile,
-        'form': form,
-        'total_users': User.objects.count(),
-        'total_jobs': Job.objects.count(),
-        'total_applications': JobApplication.objects.count(),
-        'pending_jobs': Job.objects.filter(is_active=False).count(),
-        'user': request.user
-    }
+    'profile': profile,
+    'form': form,
+    'total_users': User.objects.count(),
+    'total_jobs': Job.objects.count(),
+    'total_applications': JobApplication.objects.count(),
+    'pending_jobs': Job.objects.filter(is_active=False).count(),
+    'pending_testimonials': Testimonial.objects.filter(is_approved=False).count(),
+    'approved_testimonials': Testimonial.objects.filter(is_approved=True).count(),
+    'user': request.user
+}
 
     return render(request, 'jobs/admin/admin_dashboard.html', context)
 
@@ -412,3 +426,62 @@ def messages_list(request):
     return render(request, "jobs/admin/message.html", {"messages": messages_obj})
 
 
+@login_required
+def submit_testimonial(request):
+    existing_testimonial = Testimonial.objects.filter(user=request.user).first()
+
+    if request.method == 'POST':
+        form = TestimonialForm(request.POST, instance=existing_testimonial)
+        if form.is_valid():
+            testimonial = form.save(commit=False)
+            testimonial.user = request.user
+            testimonial.is_approved = False
+            testimonial.save()
+            messages.success(request, "Your testimonial has been submitted and is waiting for admin approval.")
+            return redirect('submit_testimonial')
+    else:
+        form = TestimonialForm(instance=existing_testimonial)
+
+    return render(request, 'jobs/submit_testimonial.html', {'form': form, 'existing_testimonial': existing_testimonial})
+
+@staff_member_required(login_url='login')
+def admin_testimonials(request):
+    status = request.GET.get('status')
+
+    testimonials = Testimonial.objects.select_related('user').order_by('-created_at')
+
+    if status == 'pending':
+        testimonials = testimonials.filter(is_approved=False)
+    elif status == 'approved':
+        testimonials = testimonials.filter(is_approved=True)
+
+    return render(request, 'jobs/admin/admin_testimonials.html', {
+        'testimonials': testimonials,
+        'status': status
+    })
+
+
+@staff_member_required(login_url='login')
+def approve_testimonial(request, id):
+    testimonial = get_object_or_404(Testimonial, id=id)
+    testimonial.is_approved = True
+    testimonial.save()
+    messages.success(request, "Testimonial approved successfully.")
+    return redirect('admin_testimonials')
+
+
+@staff_member_required(login_url='login')
+def unapprove_testimonial(request, id):
+    testimonial = get_object_or_404(Testimonial, id=id)
+    testimonial.is_approved = False
+    testimonial.save()
+    messages.success(request, "Testimonial moved back to pending.")
+    return redirect('admin_testimonials')
+
+
+@staff_member_required(login_url='login')
+def delete_testimonial(request, id):
+    testimonial = get_object_or_404(Testimonial, id=id)
+    testimonial.delete()
+    messages.success(request, "Testimonial deleted successfully.")
+    return redirect('admin_testimonials')
