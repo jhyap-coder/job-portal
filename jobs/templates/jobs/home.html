@@ -106,7 +106,7 @@
 </style>
 
 <!-- Hero Section -->
-<section class="gradient-bg min-h-screen flex items-center relative overflow-hidden pt-10 sm:pt-0">
+<section class="gradient-bg min-h-screen flex items-center relative overflow-hidden pt-10 sm:pt-0 w-full">
   <div class="absolute inset-0">
     <div class="blob absolute top-20 left-4 sm:left-10 w-40 h-40 sm:w-72 sm:h-72 bg-purple-300 opacity-20 floating"></div>
     <div class="blob absolute bottom-20 right-4 sm:right-10 w-56 h-56 sm:w-96 sm:h-96 bg-blue-300 opacity-20 floating-delayed"></div>
@@ -115,8 +115,8 @@
     <div class="absolute bottom-1/3 left-1/2 w-3 h-3 bg-white rounded-full opacity-60 floating"></div>
   </div>
 
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12 items-center">
+  <div class="w-full px-4 sm:px-6 lg:px-10 xl:px-12 2xl:px-16 relative z-10">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12 items-center min-h-screen py-12">
       <div class="text-white slide-in-left text-center lg:text-left">
         <h1 class="hero-title text-4xl sm:text-5xl lg:text-7xl font-bold mb-6">
           Start Your
@@ -131,7 +131,7 @@
           connect with top companies, and take the next step in your career.
         </p>
 
-        <form method="GET" action="{% url 'job_list' %}" class="bg-white p-3 rounded-2xl shadow-2xl mb-8">
+        <form method="GET" action="{% url 'job_list' %}" class="bg-white p-3 rounded-2xl shadow-2xl mb-8 w-full">
           <div class="flex flex-col lg:flex-row gap-3">
             <div class="flex-1">
               <input
@@ -160,7 +160,7 @@
           </div>
         </form>
 
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 text-purple-100">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 text-purple-100 w-full">
           <div class="glass-effect rounded-2xl p-4 text-center">
             <span class="block text-2xl sm:text-3xl font-bold text-yellow-400 stats-counter">100+</span>
             <span class="text-sm sm:text-base">Active Jobs</span>
@@ -176,9 +176,9 @@
         </div>
       </div>
 
-      <div class="slide-in-right">
-        <div class="relative max-w-xl mx-auto">
-          <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-2xl floating">
+      <div class="slide-in-right w-full">
+        <div class="relative w-full max-w-2xl mx-auto">
+          <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-2xl floating w-full">
             <div class="flex items-center mb-4">
               <div class="w-12 h-12 bg-gradient-to-r from-green-400 to-blue-500 rounded-full flex items-center justify-center">
                 <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -202,7 +202,7 @@
             </div>
           </div>
 
-          <div class="relative sm:absolute sm:-bottom-6 sm:-right-6 mt-6 sm:mt-0 bg-white p-5 sm:p-6 rounded-2xl shadow-xl floating-delayed">
+          <div class="relative sm:absolute sm:-bottom-6 sm:-right-6 mt-6 sm:mt-0 bg-white p-5 sm:p-6 rounded-2xl shadow-xl floating-delayed w-full sm:w-auto">
             <div class="flex items-center">
               <div class="w-8 h-8 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full flex items-center justify-center">
                 <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -223,14 +223,14 @@
 </section>
 
 <!-- Job Categories -->
-<section class="py-16 sm:py-20 bg-gray-50">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<section class="py-16 sm:py-20 bg-gray-50 w-full">
+  <div class="w-full px-4 sm:px-6 lg:px-10 xl:px-12 2xl:px-16">
     <div class="text-center mb-12 sm:mb-16 fade-in-up">
       <h2 class="text-3xl sm:text-4xl font-bold text-gray-800 mb-4">Explore Job Categories</h2>
       <p class="text-lg sm:text-xl text-gray-600">Find opportunities in your field of expertise</p>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full">
       <div class="category-card bg-white rounded-2xl shadow-md p-6 text-center hover:bg-gradient-to-r hover:from-purple-600 hover:to-blue-600 hover:text-white">
         <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-purple-100 flex items-center justify-center">
           <span class="text-2xl">💻</span>
@@ -267,15 +267,15 @@
 </section>
 
 <!-- Featured Jobs -->
-<section class="py-16 sm:py-20 bg-white">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<section class="py-16 sm:py-20 bg-white w-full">
+  <div class="w-full px-4 sm:px-6 lg:px-10 xl:px-12 2xl:px-16">
     <div class="text-center mb-12">
       <h2 class="text-3xl sm:text-4xl font-bold text-gray-800 mb-4">Featured Jobs</h2>
       <p class="text-lg text-gray-600">Handpicked opportunities for ambitious professionals</p>
     </div>
 
     {% if featured_jobs %}
-      <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
+      <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-8 w-full">
         {% for job in featured_jobs %}
           <div class="job-card bg-gradient-to-r from-indigo-600 to-blue-500 p-6 rounded-2xl shadow-lg text-white">
             <div class="flex flex-col justify-between h-full">
@@ -308,14 +308,14 @@
 </section>
 
 <!-- Why Choose Us -->
-<section class="py-16 sm:py-20 bg-gray-50">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<section class="py-16 sm:py-20 bg-gray-50 w-full">
+  <div class="w-full px-4 sm:px-6 lg:px-10 xl:px-12 2xl:px-16">
     <div class="text-center mb-12 sm:mb-16">
       <h2 class="text-3xl sm:text-4xl font-bold text-gray-800 mb-4">Why Choose JobFlow</h2>
       <p class="text-lg sm:text-xl text-gray-600">Everything you need to find the right career opportunity</p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
       <div class="bg-white rounded-2xl shadow-md p-6 text-center">
         <div class="text-4xl mb-4">⚡</div>
         <h3 class="text-xl font-semibold text-gray-800 mb-3">Fast Search</h3>
@@ -338,31 +338,31 @@
 </section>
 
 <!-- Testimonials -->
-<section class="py-16 sm:py-20 bg-white">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<section class="py-16 sm:py-20 bg-white w-full">
+  <div class="w-full px-4 sm:px-6 lg:px-10 xl:px-12 2xl:px-16">
     <div class="text-center mb-12 sm:mb-16 fade-in-up">
       <h2 class="text-3xl sm:text-4xl font-bold text-gray-800 mb-4">What Our Users Say</h2>
       <p class="text-lg sm:text-xl text-gray-600">Real stories from real professionals</p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-8 w-full">
       {% for testimonial in testimonials %}
         <div class="testimonial-card bg-gray-50 rounded-2xl shadow-md p-6">
           <div class="flex items-center mb-4">
             {% if testimonial.profile_photo_url %}
-  <img
-    src="{{ testimonial.profile_photo_url }}"
-    alt="{{ testimonial.user.get_full_name|default:testimonial.user.username }}"
-    class="w-14 h-14 rounded-full object-cover object-center mr-4 border border-gray-200 shrink-0"
-    onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name={{ testimonial.user.get_full_name|default:testimonial.user.username|urlencode }}&background=4f46e5&color=fff';"
-  >
-{% else %}
-  <img
-    src="https://ui-avatars.com/api/?name={{ testimonial.user.get_full_name|default:testimonial.user.username|urlencode }}&background=4f46e5&color=fff"
-    alt="{{ testimonial.user.get_full_name|default:testimonial.user.username }}"
-    class="w-14 h-14 rounded-full object-cover object-center mr-4 border border-gray-200 shrink-0"
-  >
-{% endif %}
+              <img
+                src="{{ testimonial.profile_photo_url }}"
+                alt="{{ testimonial.user.get_full_name|default:testimonial.user.username }}"
+                class="w-14 h-14 rounded-full object-cover object-center mr-4 border border-gray-200 shrink-0"
+                onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name={{ testimonial.user.get_full_name|default:testimonial.user.username|urlencode }}&background=4f46e5&color=fff';"
+              >
+            {% else %}
+              <img
+                src="https://ui-avatars.com/api/?name={{ testimonial.user.get_full_name|default:testimonial.user.username|urlencode }}&background=4f46e5&color=fff"
+                alt="{{ testimonial.user.get_full_name|default:testimonial.user.username }}"
+                class="w-14 h-14 rounded-full object-cover object-center mr-4 border border-gray-200 shrink-0"
+              >
+            {% endif %}
 
             <div class="min-w-0">
               <h3 class="font-semibold text-gray-800 truncate">
@@ -404,8 +404,8 @@
 </section>
 
 <!-- Call To Action -->
-<section class="py-16 sm:py-20 bg-gradient-to-r from-purple-700 to-blue-700 text-white">
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+<section class="py-16 sm:py-20 bg-gradient-to-r from-purple-700 to-blue-700 text-white w-full">
+  <div class="w-full px-4 sm:px-6 lg:px-10 xl:px-12 2xl:px-16 text-center">
     <h2 class="text-3xl sm:text-4xl font-bold mb-4">Ready to Find Your Dream Job?</h2>
     <p class="text-lg sm:text-xl text-purple-100 mb-8">
       Explore opportunities, build your future, and connect with the right employers today.

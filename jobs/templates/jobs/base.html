@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}Job Portal{% endblock %}</title>
 
-    <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
@@ -19,6 +18,8 @@
 
       body {
         min-height: 100vh;
+        margin: 0;
+        padding: 0;
       }
 
       .footer-gradient {
@@ -76,13 +77,13 @@
     </script>
   </head>
 
-  <body class="bg-gray-100 text-gray-800">
+  <body class="bg-gray-100 text-gray-800 overflow-x-hidden">
     <!-- NAVBAR START -->
     <nav
       x-data="{ isOpen: false, profileOpen: false }"
       class="fixed top-0 left-0 w-full z-50 border-b border-blue-400/20 nav-glass shadow-lg"
     >
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="w-full px-4 sm:px-6 lg:px-10 xl:px-12">
         <div class="flex items-center justify-between py-4">
           <!-- Logo -->
           <a href="{% url 'home' %}" class="flex items-center gap-3">
@@ -105,7 +106,6 @@
           <!-- Right Side -->
           <div class="flex items-center gap-3 sm:gap-4">
             {% if user.is_authenticated %}
-            <!-- Profile Dropdown -->
             <div class="relative">
               <button
                 @click="profileOpen = !profileOpen"
@@ -189,7 +189,6 @@
             </div>
             {% endif %}
 
-            <!-- Mobile Toggle -->
             <button
               @click="isOpen = !isOpen"
               class="md:hidden text-white p-2 rounded-lg hover:bg-white/10 transition"
@@ -205,7 +204,6 @@
           </div>
         </div>
 
-        <!-- Mobile Menu -->
         <div
           x-show="isOpen"
           x-cloak
@@ -243,7 +241,7 @@
     <!-- NAVBAR END -->
 
     <!-- PAGE CONTENT -->
-    <main class="max-w-7xl mx-auto mt-28 sm:mt-32 px-4 sm:px-6 lg:px-8 min-h-[60vh]">
+    <main class="w-full mt-28 sm:mt-32 min-h-[60vh]">
       {% block content %}{% endblock %}
     </main>
 
@@ -254,9 +252,8 @@
         <div class="absolute bottom-10 right-10 w-52 h-52 bg-indigo-400 rounded-full blur-3xl"></div>
       </div>
 
-      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+      <div class="relative w-full px-4 sm:px-6 lg:px-10 xl:px-12 py-14">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
-          <!-- Brand -->
           <div class="sm:col-span-2 lg:col-span-1">
             <div class="flex items-center gap-3 mb-4">
               <div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-lg shadow-lg">
@@ -287,7 +284,6 @@
             </div>
           </div>
 
-          <!-- Quick Links -->
           <div>
             <h3 class="text-xl font-semibold text-white mb-5">Quick Links</h3>
             <ul class="space-y-3">
@@ -300,7 +296,6 @@
             </ul>
           </div>
 
-          <!-- Services -->
           <div>
             <h3 class="text-xl font-semibold text-white mb-5">Services</h3>
             <ul class="space-y-3">
@@ -311,7 +306,6 @@
             </ul>
           </div>
 
-          <!-- Contact -->
           <div>
             <h3 class="text-xl font-semibold text-white mb-5">Contact</h3>
             <div class="space-y-4">
@@ -331,7 +325,6 @@
           </div>
         </div>
 
-        <!-- Bottom Footer -->
         <div class="border-t border-white/10 mt-12 pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-400">
           <p class="text-center md:text-left">
             &copy; 2025 Chitra Bahadur Thapa Chhetri. All rights reserved.
@@ -346,7 +339,6 @@
     </footer>
     <!-- FOOTER END -->
 
-    <!-- Alpine.js -->
     <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
   </body>
 </html>
