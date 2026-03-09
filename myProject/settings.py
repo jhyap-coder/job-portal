@@ -27,7 +27,7 @@ DEBUG = os.environ.get("DEBUG", "True") == "True"
 
 ALLOWED_HOSTS = os.environ.get(
     "ALLOWED_HOSTS",
-    "localhost 127.0.0.1 job-portal-5h5q.onrender.com"
+    "localhost 127.0.0.1 job-portal-5h5q.onrender.com chitrabahadur.com.np www.chitrabahadur.com.np"
 ).split()
 
 # ------------------------------
