@@ -2,43 +2,44 @@
 {% block title %}Messages{% endblock %}
 
 {% block content %}
-<div class="max-w-6xl mx-auto mt-10 bg-white p-8 rounded-xl shadow">
+<div class="w-full px-4 sm:px-6 lg:px-10 xl:px-12 py-10">
+    <div class="w-full bg-white p-6 sm:p-8 rounded-xl shadow">
+        <h1 class="text-2xl font-bold mb-6">Contact Messages</h1>
 
-    <h1 class="text-2xl font-bold mb-6">Contact Messages</h1>
+        {% if messages %}
+        <div class="overflow-x-auto">
+            <table class="w-full border border-gray-200">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="px-4 py-3 text-left">Name</th>
+                        <th class="px-4 py-3 text-left">Email</th>
+                        <th class="px-4 py-3 text-left">Phone</th>
+                        <th class="px-4 py-3 text-left">Message</th>
+                        <th class="px-4 py-3 text-left">Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for msg in messages %}
+                    <tr class="border-t">
+                        <td class="px-4 py-3">{{ msg.name }}</td>
+                        <td class="px-4 py-3 break-all">{{ msg.email }}</td>
+                        <td class="px-4 py-3">{{ msg.phone|default:"-" }}</td>
+                        <td class="px-4 py-3">{{ msg.message }}</td>
+                        <td class="px-4 py-3 whitespace-nowrap">{{ msg.created_at|date:"Y-m-d H:i" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+            <p class="text-gray-500">No messages found.</p>
+        {% endif %}
 
-    {% if messages %}
-    <div class="overflow-x-auto">
-        <table class="min-w-full border border-gray-200">
-            <thead class="bg-gray-100">
-                <tr>
-                    <th class="px-4 py-2 text-left">Name</th>
-                    <th class="px-4 py-2 text-left">Email</th>
-                    <th class="px-4 py-2 text-left">Phone</th>
-                    <th class="px-4 py-2 text-left">Message</th>
-                    <th class="px-4 py-2 text-left">Date</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for msg in messages %}
-                <tr class="border-t">
-                    <td class="px-4 py-2">{{ msg.name }}</td>
-                    <td class="px-4 py-2">{{ msg.email }}</td>
-                    <td class="px-4 py-2">{{ msg.phone|default:"-" }}</td>
-                    <td class="px-4 py-2">{{ msg.message }}</td>
-                    <td class="px-4 py-2">{{ msg.created_at|date:"Y-m-d H:i" }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="mt-6">
+            <a href="{% url 'admin_dashboard' %}" class="inline-block px-4 py-2 bg-indigo-800 text-white rounded-lg hover:bg-indigo-700">
+                Back to Dashboard
+            </a>
+        </div>
     </div>
-    {% else %}
-        <p class="text-gray-500">No messages found.</p>
-    {% endif %}
-
 </div>
-<div class="mt-4">
-    <a href="{% url 'admin_dashboard' %}" class="px-4 py-2 bg-indigo-800 text-white rounded-lg hover:bg-indigo-700">
-                    Back to Dashboard
-                </a>
-                </div>
 {% endblock %}
