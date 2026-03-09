@@ -21,15 +21,25 @@ load_dotenv(BASE_DIR / ".env")
 # ------------------------------
 # Security
 # ------------------------------
-SECRET_KEY = os.environ.get("SECRET_KEY", "unsafe-default-secret")  # Provide in Render Environment
-
+SECRET_KEY = os.environ.get("SECRET_KEY", "unsafe-default-secret")
 DEBUG = os.environ.get("DEBUG", "True") == "True"
 
-ALLOWED_HOSTS = os.environ.get(
-    "ALLOWED_HOSTS",
-    "localhost 127.0.0.1 job-portal-5h5q.onrender.com chitrabahadur.com.np www.chitrabahadur.com.np"
-).split()
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    "job-portal-5h5q.onrender.com",
+    "chitrabahadur.com.np",
+    "www.chitrabahadur.com.np",
+]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://job-portal-5h5q.onrender.com",
+    "https://chitrabahadur.com.np",
+    "https://www.chitrabahadur.com.np",
+]
+
+print("ALLOWED_HOSTS =", ALLOWED_HOSTS)
+print("CSRF_TRUSTED_ORIGINS =", CSRF_TRUSTED_ORIGINS)
 # ------------------------------
 # Applications
 # ------------------------------
