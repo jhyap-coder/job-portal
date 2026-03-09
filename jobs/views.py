@@ -437,12 +437,25 @@ def submit_testimonial(request):
             testimonial.user = request.user
             testimonial.is_approved = False
             testimonial.save()
-            messages.success(request, "Your testimonial has been submitted and is waiting for admin approval.")
-            return redirect('submit_testimonial')
+
+            messages.success(
+                request,
+                "Your testimonial has been submitted and is waiting for admin approval."
+            )
+
+            return render(request, 'jobs/testimonial_success.html')
+
     else:
         form = TestimonialForm(instance=existing_testimonial)
 
-    return render(request, 'jobs/submit_testimonial.html', {'form': form, 'existing_testimonial': existing_testimonial})
+    return render(
+        request,
+        'jobs/submit_testimonial.html',
+        {
+            'form': form,
+            'existing_testimonial': existing_testimonial
+        }
+    )
 
 @staff_member_required(login_url='login')
 def admin_testimonials(request):

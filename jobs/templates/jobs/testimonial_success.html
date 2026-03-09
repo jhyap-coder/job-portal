@@ -1,0 +1,29 @@
+{% extends "jobs/base.html" %}
+
+{% block title %}Testimonial Submitted | JobFlow{% endblock %}
+
+{% block content %}
+<section class="flex items-center justify-center min-h-[70vh] bg-gray-50 px-4">
+  <div class="bg-white shadow-xl rounded-2xl p-10 text-center max-w-lg w-full">
+    <div class="text-green-600 text-5xl mb-4">✓</div>
+
+    <h1 class="text-2xl font-bold text-gray-800 mb-3">
+      Testimonial Submitted Successfully
+    </h1>
+
+    <p class="text-gray-600 mb-4">
+      Your testimonial has been submitted and is waiting for admin approval.
+    </p>
+
+    <p class="text-sm text-gray-500">
+      Redirecting to home page...
+    </p>
+  </div>
+</section>
+
+<script>
+  setTimeout(function () {
+    window.location.href = "{% url 'home' %}";
+  }, 3000);
+</script>
+{% endblock %}
